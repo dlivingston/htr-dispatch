@@ -1,0 +1,18 @@
+
+<div class="container">
+	
+	<div class="row py-3" *ngIf="(authService.user | async)?.uid">
+		
+		<div class="card" *ngFor="let ticket of tickets | async">
+			<div class="card-body">
+				<p>Ticket ID: {{ticket.id}}</p>
+				<p>Client: {{ticket.client_name}}</p>
+				<p>Location: {{ticket.client_loc_id}}</p>
+				<p>Status: {{ticket.status}}</p>
+				<p>Priority: {{ticket.priority}}</p>
+				<p>Assigned Tech: {{ticket.assigned_tech}}</p>
+			</div>
+		</div>
+	</div>
+
+</div>

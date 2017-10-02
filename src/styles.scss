@@ -1,1 +1,67 @@
 /* You can add global styles to this file, and also import other style files */
+$htr-teal: #2384A7;
+
+.btn-primary, .bg-primary {
+	background-color: $htr-teal !important;
+}
+.btn-outline-primary {
+	color: $htr-teal !important;
+	border-color: $htr-teal !important;
+	&:hover {
+		color: #fff !important;
+		background-color: $htr-teal !important;
+	}
+}
+.btn-primary:hover {
+	background-color: darken($htr-teal, 10) !important;
+}
+.btn-outline-light:hover {
+	color: $htr-teal !important;
+}
+.btn {
+	.material-icons {
+		top: 6px;
+		line-height: 0;
+		position: relative;
+	}
+}
+
+.badge {
+	&.badge-assigned { background-color: $htr-teal !important; }
+	&.badge-unassigned { background-color: #B58900 !important; }
+	&.badge-closed { background-color: #666666 !important; }
+	&.badge-hold { background-color: #9B479F !important; }
+	&.badge-priority1 { background-color: #17a2b8 !important; }
+	&.badge-priority2 { background-color: #28a745 !important; }
+	&.badge-priority3 { color: #111; background-color: #ffc107 !important; }
+	&.badge-priority4 { background-color: #dc3545 !important; }
+}
+
+.card.service-note .card-header {
+	background-color: $htr-teal;
+	color: #fff;
+	.accordion-toggle {
+		font-size: 1.125rem;
+		i.material-icons.attachment {
+			transform: rotate(-45deg);
+			position: relative;
+			position: relative;
+		    top: 10px;
+		    font-size: 32px;
+		    line-height: 1rem;
+		    height: 0px;
+		}
+		i.material-icons.arrow {
+			transform: rotate(-90deg);
+			transition: transform 0.4s ease-out;
+			position: relative;
+			top: 4px;
+		}
+		&[aria-expanded='true'] {
+			i.material-icons.arrow {
+				transform: rotate(0deg);
+				transition: transform 0.4s ease-out;
+			}
+		}
+	}
+}

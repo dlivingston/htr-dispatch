@@ -4,10 +4,12 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase/app';
 import { AuthService } from './auth.service';
+import { TicketService } from './ticket.service';
 import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-root',
+    providers: [TicketService],
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.scss']
 })

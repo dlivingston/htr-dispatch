@@ -14,7 +14,14 @@ import { LoginComponent } from './login/login.component';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
 import { TicketDetailsComponent } from './ticket-details/ticket-details.component';
 import { AuthService } from './auth.service';
-
+import { UploadService } from './uploads/shared/upload.service';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { NewTicketComponent } from './new-ticket/new-ticket.component';
+import { ServiceNoteComponent } from './service-note/service-note.component';
+import { NewServiceNoteComponent } from './new-service-note/new-service-note.component';
+//import { O2UploadToFbsComponent } from 'o2-upload-to-fbs';
+import { UploadFormComponent } from './uploads/upload-form/upload-form.component';
 export const firebaseConfig = {
 	apiKey: "AIzaSyCu1LlPQz0CBXj4qdnShbcU3xHPGTdn22c",
     authDomain: "htr-beta.firebaseapp.com",
@@ -26,8 +33,10 @@ export const firebaseConfig = {
 
 const appRoutes: Routes = [
 	{ path: 'ticket-list', component: TicketListComponent },
-	{ path: 'ticket-detail', component: TicketDetailsComponent },
+	{ path: 'new-ticket', component: NewTicketComponent },
+	{ path: 'ticket-detail/:id', component: TicketDetailsComponent },
 	{ path: '', component: LoginComponent },
+	{ path: 'upload', component: UploadFormComponent }
 ];
 
 
@@ -36,7 +45,12 @@ const appRoutes: Routes = [
 	AppComponent,
 	LoginComponent,
 	TicketListComponent,
-	TicketDetailsComponent
+	TicketDetailsComponent,
+	NewTicketComponent,
+	ServiceNoteComponent,
+	NewServiceNoteComponent,
+	//O2UploadToFbsComponent,
+	UploadFormComponent,
 	],
 	imports: [
 	BrowserModule,
@@ -46,11 +60,13 @@ const appRoutes: Routes = [
       appRoutes,
       { enableTracing: true } // <-- debugging purposes only
     ),
+    BsDatepickerModule.forRoot(),
+    AccordionModule.forRoot(),
 	AngularFireModule.initializeApp(firebaseConfig),
 	AngularFireDatabaseModule,
 	AngularFireAuthModule
 	],
-	providers: [AuthService],
+	providers: [AuthService, UploadService],
 	bootstrap: [AppComponent]
 })
 export class AppModule { }

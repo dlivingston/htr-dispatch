@@ -1,0 +1,26 @@
+$htr-teal: #2384A7;
+.card.service-note,
+.card.service-note .card-header,
+.panel.service-note {
+  background-color: #5bc0de;
+  color: #fff;
+}
+// .card.service-note {
+// 	background-color: $htr-teal;
+// 	.card-header {
+// 		background-color: $htr-teal;
+// 	}
+
+// 	i.material-icons {
+// 		transform: rotate(-90deg);
+// 		transition: transform 0.4s ease-out;
+// 		position: relative;
+// 		top: 4px;
+// 	}
+// 	&[aria-expanded='true'] {
+// 		i.material-icons {
+// 			transform: rotate(0deg);
+// 			transition: transform 0.4s ease-out;
+// 		}
+// 	}
+// }

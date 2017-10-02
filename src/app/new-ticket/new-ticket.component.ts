@@ -1,0 +1,89 @@
+import { Component, OnInit } from '@angular/core';
+import {NgForm} from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
+import { TicketService } from '../ticket.service';
+import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+@Component({
+	selector: 'app-new-ticket',
+	templateUrl: './new-ticket.component.html',
+	styleUrls: ['./new-ticket.component.scss']
+})
+export class NewTicketComponent implements OnInit {
+	tickets: FirebaseListObservable<any[]>;
+	private techs: FirebaseListObservable<any[]>;
+	newTicketId: string;
+	lastTicketId: string;
+	private partsOrder: boolean;
+	colorTheme = 'theme-default';
+	bsConfig: Partial<BsDatepickerConfig>;
+
+	constructor(public authService: AuthService, public af: AngularFireDatabase, private router:Router) { 
+		this.techs = af.list('/techs', {});
+		this.tickets = af.list('/tickets', {
+			preserveSnapshot: true,
+			query: {
+				limitToLast: 1,
+    			orderByKey: true
+			}
+		});
+		this.tickets.subscribe(snapshots => {
+			snapshots.forEach(snapshot => {
+				this.lastTicketId = snapshot.key;
+				var lastTicketSlice = this.lastTicketId.slice(4).replace(/-/g, "");
+				var newTicketNum = ("0000000" + ((+lastTicketSlice) + 1)).slice(-7);
+				this.newTicketId = ['HTR-', newTicketNum.slice(0, 3), '-', newTicketNum.slice(3)].join('');
+			});
+		});
+		this.partsOrder = false;
+		this.bsConfig = Object.assign({}, {containerClass: this.colorTheme});
+	}
+
+	createTicket(f: NgForm) {
+		var newID = this.newTicketId;
+		let newTicket = this.af.object('/tickets/' + newID);
+		var now = new Date();
+		newTicket.set({ id : newID });
+		newTicket.update({last_updated : now});
+		if(f.value.address_city){ newTicket.update({address_city : f.value.address_city}); } else { newTicket.update({address_city : ""}); }
+		if(f.value.address_ln1) { newTicket.update({address_ln1 : f.value.address_ln1}); } else { newTicket.update({address_ln1 : ""}); }
+		if(f.value.address_ln2) { newTicket.update({address_ln2 : f.value.address_ln2}); } else { newTicket.update({address_ln2 : ""}); }
+		if(f.value.address_state) { newTicket.update({address_state : f.value.address_state}); } else { newTicket.update({address_state : ""}); }
+		if(f.value.address_zip) { newTicket.update({address_zip : f.value.address_zip}); } else { newTicket.update({address_zip : ""}); }
+		if(f.value.alt_contact_email) { newTicket.update({alt_contact_email : f.value.alt_contact_email}); } else { newTicket.update({alt_contact_email : ""}); }
+		if(f.value.alt_contact_name) { newTicket.update({alt_contact_name : f.value.alt_contact_name}); } else { newTicket.update({alt_contact_name : ""}); }
+		if(f.value.alt_contact_phone) { newTicket.update({alt_contact_phone : f.value.alt_contact_phone}); } else { newTicket.update({alt_contact_phone : ""}); }
+		if(f.value.assigned_tech) { newTicket.update({assigned_tech : f.value.assigned_tech}); } else { newTicket.update({assigned_tech : "Unassigned"}); }
+		if(f.value.callback) { newTicket.update({callback : f.value.callback}); } else { newTicket.update({callback : false}); }
+		if(f.value.client_loc_id) { newTicket.update({client_loc_id : f.value.client_loc_id}); } else { newTicket.update({client_loc_id : ""}); }
+		if(f.value.client_name) { newTicket.update({client_name : f.value.client_name}); } else { newTicket.update({client_name : ""}); }
+		if(f.value.desc_notes) { newTicket.update({desc_notes : f.value.desc_notes}); } else { newTicket.update({desc_notes : ""}); }
+		if(f.value.discount_partial) { newTicket.update({discount_partial : f.value.discount_partial}); } else { newTicket.update({discount_partial : false}); }
+		if(f.value.estPartArrDate) { newTicket.update({estPartArrDate : f.value.estPartArrDate}); } else { newTicket.update({estPartArrDate : ""}); }
+		if(f.value.parts_ordered) { newTicket.update({parts_ordered : f.value.parts_ordered}); } else { newTicket.update({parts_ordered : false}); }
+		if(f.value.parts_ordered_by) { newTicket.update({parts_ordered_by : f.value.parts_ordered_by}); } else { newTicket.update({parts_ordered_by : ""}); }
+		if(f.value.parts_vendor) { newTicket.update({parts_vendor : f.value.parts_vendor}); } else { newTicket.update({parts_vendor : ""}); }
+		if(f.value.primary_contact_email) { newTicket.update({primary_contact_email : f.value.primary_contact_email}); } else { newTicket.update({primary_contact_email : ""}); }
+		if(f.value.primary_contact_name) { newTicket.update({primary_contact_name : f.value.primary_contact_name}); } else { newTicket.update({primary_contact_name : ""}); }
+		if(f.value.primary_contact_phone) { newTicket.update({primary_contact_phone : f.value.primary_contact_phone}); } else { newTicket.update({primary_contact_phone : ""}); }
+		if(f.value.priority) { newTicket.update({priority : f.value.priority}); } else { newTicket.update({priority : ""}); }
+		if(f.value.sched_srvc_date) { newTicket.update({sched_srvc_date : f.value.sched_srvc_date}); } else { newTicket.update({sched_srvc_date : ""}); }
+		if(f.value.status) { newTicket.update({status : f.value.status}); } else { newTicket.update({status : ""}); }
+		this.router.navigate(['/ticket-detail/' + newID]);
+
+	}
+
+	togglePartsOrderedPanel() {
+		this.partsOrder ? this.partsOrder = false : this.partsOrder = true;
+	}
+
+	ngOnInit() {
+		
+	}
+
+	ngOnDestroy() {
+		this.newTicketId = ''; 
+	}
+
+}

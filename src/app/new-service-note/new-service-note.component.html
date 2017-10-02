@@ -1,0 +1,21 @@
+<div class="card bg-light mb-3">
+	<div class="card-body">
+		<form #srvNoteForm="ngForm">
+			<div class="form-group">
+				<textarea name="serviceNoteInfo" id="serviceNoteInfo" [(ngModel)]="serviceNoteInfo" cols="30" rows="10" class="form-control" placeholder="Enter Notes Here..."></textarea>
+			</div>
+			<div class="row">
+				<div class="col">
+					<label>
+						<input type="file" class="btn btn-default" (change)="detectFiles($event)">
+					</label>
+				</div>
+				<div class="col">
+					<button class="btn btn-success float-right" (click)="saveNote(srvNoteForm)">Save Note</button>
+					<button class="btn btn-secondary float-right mr-2" (click)="cancelNote()">Cancel</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+</div>

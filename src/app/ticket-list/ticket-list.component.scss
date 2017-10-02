@@ -1,0 +1,23 @@
+.details-link {
+	display: block;
+	.material-icons {
+		top: 6px;
+		left: -6px;
+		line-height: 0;
+		position: relative;
+	}
+}
+.btn.toggle {
+	&.ascend {
+		i.material-icons {
+			transform: rotate(0deg);
+			transition: transform 0.4s ease-out;
+		}
+	}
+	&.descend {
+		i.material-icons {
+			transform: rotate(180deg);
+			transition: transform 0.4s ease-out;
+		}
+	}
+}

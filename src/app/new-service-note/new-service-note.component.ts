@@ -32,9 +32,13 @@ export class NewServiceNoteComponent implements OnInit,OnChanges {
  		var now = new Date();		
  		var strServiceNoteText;
  		var attachedFileName;
- 		let file = this.selectedFiles.item(0)
- 		this.currentUpload = new Upload(file);
- 		if(this.selectedFiles){ attachedFileName = file.name } else { attachedFileName = "" }
+ 		if(this.selectedFiles){ 
+ 			let file = this.selectedFiles.item(0);
+ 			this.currentUpload = new Upload(file);
+ 			attachedFileName = file.name; 
+ 		} else { 
+ 			attachedFileName = ""; 
+ 		}
  		if(f.value.serviceNoteInfo){ strServiceNoteText = f.value.serviceNoteInfo} else {strServiceNoteText = ""}
  		this.notes.push({ticketID: this.ticketID, serviceNoteInfo: strServiceNoteText, attachedFileName: attachedFileName, timeStamp: now.toString()})
  			.then((note) => { 

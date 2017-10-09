@@ -1,67 +1,189 @@
 <div class="container my-3" *ngIf="!(authService.user | async)?.uid">
 	<div class="alert alert-danger" >
-	  Unauthorized Access. Please Sign In. 
+	  Unauthorized Access. Please Sign In.
 	</div>
 </div>
 <div class="container py-4" *ngIf="(authService.user | async)?.uid">
 	<h1>Dispatch List</h1>
 	<div class="row py-3">
-		<div class="col">
-			<button class="btn btn-outline-primary" disabled (click)="toggleFilterPanel()">Apply Filter <i class="material-icons">chevron_right</i></button>
-			<div class="card mt-3" *ngIf="viewFilter">
+		<div class="col-md-6">
+			<div class="card" >
+				<div class="card-header bg-primary text-white">List Filters</div>
 				<div class="card-body">
-					<div class="btn-group">
-						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Status</button>
-						<div class="dropdown-menu">
-							<a href="" class="dropdown-item"><span class="badge badge-priority1">1</span></a>
-							<a href="" class="dropdown-item"><span class="badge badge-priority2">2</span></a>
-							<a href="" class="dropdown-item"><span class="badge badge-priority3">3</span></a>
-							<a href="" class="dropdown-item"><span class="badge badge-priority4">4</span></a>
+					<div class="input-group mb-3">
+						<div class="input-group-btn priority-selection col-lg-3 col-4 p-0">
+							<button class="btn btn-primary dropdown-toggle btn-block px-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Priority</button>
+							<div class="dropdown-menu">
+								<a (click)="togglePriorityFilterOptions('All')" class="dropdown-item">
+									<div class="row">
+										<div class="col-1">
+											<i class="material-icons" [class.d-none]="priorityFilterOptions.indexOf('All') === -1">check</i>
+										</div>
+										<div class="col ml-1">
+											<span class="badge badge-light">All</span>
+										</div>
+									</div>
+								</a>
+								<a (click)="togglePriorityFilterOptions('1')" class="dropdown-item">
+									<div class="row">
+										<div class="col-1">
+											<i class="material-icons" [class.d-none]="priorityFilterOptions.indexOf('1') === -1">check</i>
+										</div>
+										<div class="col ml-1">
+											<span class="badge badge-priority1">1</span> - Urgent
+										</div>
+									</div>
+								</a>
+								<a (click)="togglePriorityFilterOptions('2')" class="dropdown-item">
+									<div class="row">
+										<div class="col-1">
+											<i class="material-icons" [class.d-none]="priorityFilterOptions.indexOf('2') === -1">check</i>
+										</div>
+										<div class="col ml-1">
+											<span class="badge badge-priority2">2</span> - High
+										</div>
+									</div>
+								</a>
+								<a (click)="togglePriorityFilterOptions('3')" class="dropdown-item">
+									<div class="row">
+										<div class="col-1">
+											<i class="material-icons" [class.d-none]="priorityFilterOptions.indexOf('3') === -1">check</i>
+										</div>
+										<div class="col ml-1">
+											<span class="badge badge-priority3">3</span> - Normal
+										</div>
+									</div>
+								</a>
+								<a (click)="togglePriorityFilterOptions('4')" class="dropdown-item">
+									<div class="row">
+										<div class="col-1">
+											<i class="material-icons" [class.d-none]="priorityFilterOptions.indexOf('4') === -1">check</i>
+										</div>
+										<div class="col ml-1">
+											<span class="badge badge-priority4">4</span> - Low
+										</div>
+									</div>
+								</a>
+							</div>
 						</div>
+						<div class="form-control col text-nowrap text-truncate"><span *ngFor="let option of priorityFilterOptions" class="option-item">{{option}}<span class="comma-space">, &nbsp;</span></span></div>
 					</div>
-					<div class="btn-group">
-						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Priority</button>
-						<div class="dropdown-menu">
-							<a href="" class="dropdown-item"><span class="badge badge-priority1">1</span></a>
-							<a href="" class="dropdown-item"><span class="badge badge-priority2">2</span></a>
-							<a href="" class="dropdown-item"><span class="badge badge-priority3">3</span></a>
-							<a href="" class="dropdown-item"><span class="badge badge-priority4">4</span></a>
+					<div class="input-group mb-3">
+						<div class="input-group-btn status-selection col-lg-3 col-4 p-0">
+							<button class="btn btn-primary dropdown-toggle btn-block px-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Status</button>
+							<div class="dropdown-menu">
+								<a (click)="toggleStatusFilterOptions('All')" class="dropdown-item">
+									<div class="row">
+										<div class="col-1">
+											<i class="material-icons" [class.d-none]="statusFilterOptions.indexOf('All') === -1">check</i>
+										</div>
+										<div class="ml-1 col">
+											<span class="badge badge-light">All</span>
+										</div>
+									</div>
+								</a>
+								<a (click)="toggleStatusFilterOptions('Assigned')" class="dropdown-item">
+									<div class="row">
+										<div class="col-1">
+											<i class="material-icons" [class.d-none]="statusFilterOptions.indexOf('Assigned') === -1">check</i>
+										</div>
+										<div class="col ml-1">
+											<span class="badge badge-assigned">Assigned</span>
+										</div>
+									</div>
+								</a>
+								<a (click)="toggleStatusFilterOptions('Unassigned')" class="dropdown-item">
+									<div class="row">
+										<div class="col-1">
+											<i class="material-icons" [class.d-none]="statusFilterOptions.indexOf('Unassigned') === -1">check</i>
+										</div>
+										<div class="col ml-1">
+											<span class="badge badge-unassigned">Unassigned</span>
+										</div>
+									</div>
+								</a>
+								<a (click)="toggleStatusFilterOptions('Closed')" class="dropdown-item">
+									<div class="row">
+										<div class="col-1">
+											<i class="material-icons" [class.d-none]="statusFilterOptions.indexOf('Closed') === -1">check</i>
+										</div>
+										<div class="col ml-1">
+											<span class="badge badge-closed">Closed</span>
+										</div>
+									</div>
+								</a>
+								<a (click)="toggleStatusFilterOptions('Hold')" class="dropdown-item">
+									<div class="row">
+										<div class="col-1">
+											<i class="material-icons" [class.d-none]="statusFilterOptions.indexOf('Hold') === -1">check</i>
+										</div>
+										<div class="col ml-1">
+											<span class="badge badge-hold">Hold</span>
+										</div>
+									</div>
+								</a>
+							</div>
 						</div>
+						<div class="form-control col text-nowrap text-truncate"><span *ngFor="let option of statusFilterOptions" class="option-item">{{option}}<span class="comma-space">, &nbsp;</span></span></div>
 					</div>
-					<div class="btn-group">
-						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Assigned</button>
-						<div class="dropdown-menu">
-							<a href="" class="dropdown-item"><span class="badge badge-priority1">1</span></a>
-							<a href="" class="dropdown-item"><span class="badge badge-priority2">2</span></a>
-							<a href="" class="dropdown-item"><span class="badge badge-priority3">3</span></a>
-							<a href="" class="dropdown-item"><span class="badge badge-priority4">4</span></a>
+					<div class="input-group mb-3">
+						<div class="input-group-btn assigned-selection col-lg-3 col-4 p-0">
+							<button class="btn btn-primary btn-block dropdown-toggle px-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Assigned</button>
+							<div class="dropdown-menu">
+								<a (click)="toggleAssignedTechFilterOptions('All')" class="dropdown-item">
+									<div class="row">
+										<div class="col-1">
+											<i class="material-icons" [class.d-none]="assignedTechFilterOptions.indexOf('All') === -1">check</i>
+										</div>
+										<div class="col px-2">All</div>
+									</div>
+								</a>
+								<a (click)="toggleAssignedTechFilterOptions(tech.$value)" class="dropdown-item" *ngFor="let tech of techs | async">
+									<div class="row">
+										<div class="col-1">
+											<i class="material-icons" [class.d-none]="assignedTechFilterOptions.indexOf(tech.$value) === -1">check</i>
+										</div>
+										<div class="col px-2">{{tech.$value}}</div>
+									</div>
+								</a>
+								<a (click)="toggleAssignedTechFilterOptions('Unassigned')" class="dropdown-item">
+									<div class="row">
+										<div class="col-1">
+											<i class="material-icons" [class.d-none]="assignedTechFilterOptions.indexOf('Unassigned') === -1">check</i>
+										</div>
+										<div class="col px-2">Unassigned</div>
+									</div>
+								</a>
+							</div>
 						</div>
+						<div class="form-control col text-nowrap text-truncate"><span *ngFor="let option of assignedTechFilterOptions" class="option-item">{{option}}<span class="comma-space">, &nbsp;</span></span></div>
 					</div>
 				</div>
 			</div>
 			<div class="row my-3">
-				<div class="col-md-6">
-					<div class="form-group">
-						<label for="selectOrder">Order By:</label>
-						<div class="input-group">
-							<select name="selectOrder" id="selectOrder" class="form-control" [ngModel]="selectOrder" (ngModelChange)="orderBy($event)">
-								<option value="id" selected>Ticket ID</option>
-								<option value="client_name">Company Name</option>
-								<option value="assigned_tech">Assigned Tech</option>
-								<option value="sched_srvc_date">Sched. Service</option>
-								<option value="last_updateed" >Last Updated</option>
-								<option value="priority">Priority</option>
-							</select>
-							<button class="btn btn-success ml-1 toggle" (click)="toggleAscending()" [ngClass]="sortAscending ? 'ascend' : 'descend'"><i class="material-icons">arrow_downward</i></button>
+				<div class="col-lg-8">
+					<div class="input-group order-by my-3">
+						<div class="input-group-btn">
+							<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Order By:</button>
+							<div class="dropdown-menu">
+								<a *ngFor="let option of orderByOptions" class="dropdown-item"  (click)="orderBy(option)">{{option.label}}</a>
+							</div>
 						</div>
+						<div class="form-control" [ngClass]="{'badge-priority1' : (ticketPriority === '1'), 'badge-priority2' : (ticketPriority === '2'), 'badge-priority3' : (ticketPriority === '3'), 'badge-priority4' : (ticketPriority === '4')}">
+							{{selectedOption.label}}
+						</div>
+						<span class="input-group-btn">
+							<button class="btn btn-success toggle" (click)="toggleAscending()" [ngClass]="sortAscending ? 'ascend' : 'descend'"><i class="material-icons">sort</i></button>
+						</span>
 					</div>
-					<button class="btn btn-primary btn-block" [routerLink]="['/new-ticket']">Create New Ticket <i class="material-icons">add</i></button>
-					
+
+					<button class="btn btn-primary px-4" [routerLink]="['/new-ticket']">Create New Ticket <i class="material-icons">add</i></button>
+
 				</div>
 			</div>
 		</div>
-		<div class="col">
-			<div class="card mb-2" *ngFor="let ticket of tickets | async">
+		<div class="col-md-6">
+			<div class="card mb-2" *ngFor="let ticket of tickets | async | statusFilter:statusFilterOptions | priorityFilter:priorityFilterOptions | assignedTechFilter:assignedTechFilterOptions">
 				<div class="card-body">
 					<div class="row">
 						<div class="col">
@@ -74,13 +196,13 @@
 							<div class="row">
 								<div class="col">
 									<div>
-										<small class="text-secondary">Status:</small> <br> 
+										<small class="text-secondary">Status:</small> <br>
 										<h4><span class="badge status" [class.badge-assigned]="ticket.status === 'Assigned'" [class.badge-unassigned]="ticket.status === 'Unassigned'" [class.badge-hold]="ticket.status === 'Hold'" [class.badge-closed]="ticket.status === 'Closed'">{{ticket.status}}</span></h4>
 									</div>
 								</div>
 								<div class="col">
 									<div>
-										<small class="text-secondary">Priority:</small> <br> 
+										<small class="text-secondary">Priority:</small> <br>
 										<h4><span class="badge priority" [class.badge-priority1]="ticket.priority === '1'" [class.badge-priority2]="ticket.priority === '2'" [class.badge-priority3]="ticket.priority === '3'" [class.badge-priority4]="ticket.priority === '4'">{{ticket.priority}}</span></h4>
 									</div>
 								</div>
@@ -94,5 +216,4 @@
 			</div>
 		</div>
 	</div>
-
 </div>

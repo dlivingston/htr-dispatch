@@ -22,13 +22,25 @@ import { ServiceNoteComponent } from './service-note/service-note.component';
 import { NewServiceNoteComponent } from './new-service-note/new-service-note.component';
 //import { O2UploadToFbsComponent } from 'o2-upload-to-fbs';
 import { UploadFormComponent } from './uploads/upload-form/upload-form.component';
+import { StatusFilterPipe } from './status-filter.pipe';
+import { PriorityFilterPipe } from './priority-filter.pipe';
+import { AssignedTechFilterPipe } from './assigned-tech-filter.pipe';
+// export const firebaseConfig = {
+// 	apiKey: "AIzaSyAH2iBrD3Pu0FO9lolVnKEmVviYAdBOptc",
+//     authDomain: "htr-dispatch.firebaseapp.com",
+//     databaseURL: "https://htr-dispatch.firebaseio.com",
+//     projectId: "htr-dispatch",
+//     storageBucket: "htr-dispatch.appspot.com",
+//     messagingSenderId: "151102819118"
+// };
+
 export const firebaseConfig = {
-	apiKey: "AIzaSyAH2iBrD3Pu0FO9lolVnKEmVviYAdBOptc",
-    authDomain: "htr-dispatch.firebaseapp.com",
-    databaseURL: "https://htr-dispatch.firebaseio.com",
-    projectId: "htr-dispatch",
-    storageBucket: "htr-dispatch.appspot.com",
-    messagingSenderId: "151102819118"
+	apiKey: "AIzaSyCu1LlPQz0CBXj4qdnShbcU3xHPGTdn22c",
+    authDomain: "htr-beta.firebaseapp.com",
+    databaseURL: "https://htr-beta.firebaseio.com",
+    projectId: "htr-beta",
+    storageBucket: "htr-beta.appspot.com",
+    messagingSenderId: "519074297252"
 };
 
 const appRoutes: Routes = [
@@ -51,6 +63,9 @@ const appRoutes: Routes = [
 	NewServiceNoteComponent,
 	//O2UploadToFbsComponent,
 	UploadFormComponent,
+	StatusFilterPipe,
+	PriorityFilterPipe,
+	AssignedTechFilterPipe,
 	],
 	imports: [
 	BrowserModule,

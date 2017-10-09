@@ -16,10 +16,12 @@ export class NewTicketComponent implements OnInit {
 	newTicketId: string;
 	lastTicketId: string;
 	private partsOrder: boolean;
+	private ticketPriority: string;
+	private ticketStatus: string;
 	colorTheme = 'theme-default';
 	bsConfig: Partial<BsDatepickerConfig>;
 
-	constructor(public authService: AuthService, public af: AngularFireDatabase, private router:Router) { 
+	constructor(public authService: AuthService, public af: AngularFireDatabase, private router:Router) {
 		this.techs = af.list('/techs', {});
 		this.tickets = af.list('/tickets', {
 			preserveSnapshot: true,
@@ -37,6 +39,8 @@ export class NewTicketComponent implements OnInit {
 			});
 		});
 		this.partsOrder = false;
+		this.ticketPriority = '4';
+		this.ticketStatus = 'Unassigned';
 		this.bsConfig = Object.assign({}, {containerClass: this.colorTheme});
 	}
 
@@ -67,9 +71,11 @@ export class NewTicketComponent implements OnInit {
 		if(f.value.primary_contact_email) { newTicket.update({primary_contact_email : f.value.primary_contact_email}); } else { newTicket.update({primary_contact_email : ""}); }
 		if(f.value.primary_contact_name) { newTicket.update({primary_contact_name : f.value.primary_contact_name}); } else { newTicket.update({primary_contact_name : ""}); }
 		if(f.value.primary_contact_phone) { newTicket.update({primary_contact_phone : f.value.primary_contact_phone}); } else { newTicket.update({primary_contact_phone : ""}); }
-		if(f.value.priority) { newTicket.update({priority : f.value.priority}); } else { newTicket.update({priority : ""}); }
+		// if(f.value.priority) { newTicket.update({priority : f.value.priority}); } else { newTicket.update({priority : ""}); }
 		if(f.value.sched_srvc_date) { newTicket.update({sched_srvc_date : f.value.sched_srvc_date}); } else { newTicket.update({sched_srvc_date : ""}); }
-		if(f.value.status) { newTicket.update({status : f.value.status}); } else { newTicket.update({status : ""}); }
+		// if(f.value.status) { newTicket.update({status : f.value.status}); } else { newTicket.update({status : ""}); }
+		newTicket.update({priority: this.ticketPriority});
+		newTicket.update({status: this.ticketStatus});
 		this.router.navigate(['/ticket-detail/' + newID]);
 
 	}
@@ -78,12 +84,20 @@ export class NewTicketComponent implements OnInit {
 		this.partsOrder ? this.partsOrder = false : this.partsOrder = true;
 	}
 
+	setTicketPriority(level: string){
+		this.ticketPriority = level;
+	}
+
+	setTicketStatus(status: string){
+		this.ticketStatus = status;
+	}
+
 	ngOnInit() {
-		
+
 	}
 
 	ngOnDestroy() {
-		this.newTicketId = ''; 
+		this.newTicketId = '';
 	}
 
 }

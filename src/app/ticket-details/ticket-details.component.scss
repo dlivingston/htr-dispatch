@@ -1,3 +1,4 @@
+$htr-teal: #2384A7;
 .btn.back {
 	.material-icons {
 		left: -6px;
@@ -10,7 +11,7 @@
 	border: 1px solid rgba(0,0,0,0);
 	align-items: center;
 	position: relative;
-	flex: 1 1 auto; 
+	flex: 1 1 auto;
 	width: 100%;
 	background: transparent;
 	color: #212529;
@@ -41,5 +42,23 @@ select[disabled].form-control {
 			padding-left: 0;
 		}
 	}
-	
+
+}
+.priority {
+	width: 140px;
+	.badge { font-size: 1rem; }
+	.badge-priority4 { border-color: #17a2b8 !important; }
+	.badge-priority3 { border-color: #28a745 !important; }
+	.badge-priority2 { border-color: #ffc107 !important; }
+	.badge-priority1 { border-color: #dc3545 !important; }
+}
+.status {
+	.dropdown-item {
+		.badge { width: 100%; }
+	}
+	.badge { font-size: 1rem; }
+	.badge-assigned { border-color: $htr-teal !important; }
+	.badge-unassigned { border-color: #B58900 !important; }
+	.badge-closed { border-color: #666666 !important; }
+	.badge-hold { border-color: #9B479F !important; }
 }

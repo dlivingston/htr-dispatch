@@ -8,6 +8,7 @@ import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable }
 import { Ticket } from '../ticket';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { Upload } from '../uploads/shared/upload';
+import 'rxjs/add/operator/take';
 
 import 'rxjs/add/operator/switchMap';
 @Component({
@@ -23,16 +24,20 @@ export class TicketDetailsComponent implements OnInit {
 	private editMode: boolean;
 	private partsOrder: boolean;
 	private addServiceNoteActive: boolean;
+	private ticketPriority: string;
+	private ticketStatus: string;
 	fileUploads: any[];
 
 	colorTheme = 'theme-default';
 	bsConfig: Partial<BsDatepickerConfig>;
-	constructor(public authService: AuthService, public ticketService: TicketService, public af: AngularFireDatabase, private route: ActivatedRoute, private location: Location) { 
+	constructor(public authService: AuthService, public ticketService: TicketService, public af: AngularFireDatabase, private route: ActivatedRoute, private location: Location) {
 		this.techs = af.list('/techs', {});
 		this.route.params.subscribe( params => this.id = params.id );
 		this.ticket = this.af.object('/tickets/' + this.id);
-		this.ticket.subscribe(ticket => {
+		this.ticket.take(1).subscribe(ticket => {
 			this.partsOrder = ticket.parts_ordered;
+			this.ticketPriority = ticket.priority;
+			this.ticketStatus = ticket.status;
 			return ticket;
 		});
 		this.attachedFiles = this.af.list('/uploads', {
@@ -41,15 +46,14 @@ export class TicketDetailsComponent implements OnInit {
 				equalTo: this.id
 			}
 		});
-		this.editMode = false;	
+		this.editMode = false;
 		this.addServiceNoteActive = false;
 		this.bsConfig = Object.assign({}, {containerClass: this.colorTheme});
 	}
 
 	updateTicket(f: NgForm) {
-		console.log('ngForm', f.value);
 		this.ticket = this.af.object('/tickets/' + this.id);
-		var now = new Date();		
+		var now = new Date();
 		if(f.value.address_city){ this.ticket.update({address_city : f.value.address_city}); }
 		if(f.value.address_ln1) { this.ticket.update({address_ln1 : f.value.address_ln1}); }
 		if(f.value.address_ln2) { this.ticket.update({address_ln2 : f.value.address_ln2}); }
@@ -64,16 +68,18 @@ export class TicketDetailsComponent implements OnInit {
 		if(f.value.client_name) { this.ticket.update({client_name : f.value.client_name}); }
 		if(f.value.desc_notes) { this.ticket.update({desc_notes : f.value.desc_notes}); }
 		if(f.value.discount_partial) { this.ticket.update({discount_partial : f.value.discount_partial}); } else { this.ticket.update({discount_partial : false}); }
-		if(f.value.estPartArrDate) { this.ticket.update({estPartArrDate : f.value.estPartArrDate}); } 
+		if(f.value.estPartArrDate) { this.ticket.update({estPartArrDate : f.value.estPartArrDate}); }
 		if(f.value.parts_ordered) { this.ticket.update({parts_ordered : f.value.parts_ordered}); } else { this.ticket.update({parts_ordered : false}); }
 		if(f.value.parts_ordered_by) { this.ticket.update({parts_ordered_by : f.value.parts_ordered_by}); }
 		if(f.value.parts_vendor) { this.ticket.update({parts_vendor : f.value.parts_vendor}); }
 		if(f.value.primary_contact_email) { this.ticket.update({primary_contact_email : f.value.primary_contact_email}); }
 		if(f.value.primary_contact_name) { this.ticket.update({primary_contact_name : f.value.primary_contact_name}); }
 		if(f.value.primary_contact_phone) { this.ticket.update({primary_contact_phone : f.value.primary_contact_phone}); }
-		if(f.value.priority) { this.ticket.update({priority : f.value.priority}); }
-		if(f.value.sched_srvc_date) { this.ticket.update({sched_srvc_date : f.value.sched_srvc_date}); }
-		if(f.value.status) { this.ticket.update({status : f.value.status}); }
+		// if(f.value.priority) { this.ticket.update({priority : f.value.priority}); }
+		this.ticket.update({priority: this.ticketPriority});
+		if(f.value.sched_srvc_date) { this.ticket.update({sched_srvc_date : f.value.sched_srvc_date}); } else { this.ticket.update({sched_srvc_date : ''}); }
+		this.ticket.update({status: this.ticketStatus});
+		// if(f.value.status) { this.ticket.update({status : f.value.status}); }
 		this.ticket.update({last_updated : now});
 		this.toggleEditMode();
 	}
@@ -90,16 +96,23 @@ export class TicketDetailsComponent implements OnInit {
 		this.addServiceNoteActive = active;
 	}
 
+	setTicketPriority(level: string){
+		this.ticketPriority = level;
+	}
+
+	setTicketStatus(status: string){
+		this.ticketStatus = status;
+	}
+
 	getAttachedFiles(){
-		
+
 	}
 
 	addUploadFile(fileDetails: Upload){
-		console.log('fileDetails', fileDetails );
 	}
 
 	ngOnInit() {
-		
+
 	}
 
 }

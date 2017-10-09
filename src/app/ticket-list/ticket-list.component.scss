@@ -10,14 +10,58 @@
 .btn.toggle {
 	&.ascend {
 		i.material-icons {
-			transform: rotate(0deg);
+			transform: rotateX(0deg);
 			transition: transform 0.4s ease-out;
 		}
 	}
 	&.descend {
 		i.material-icons {
-			transform: rotate(180deg);
+			transform: rotateX(180deg);
 			transition: transform 0.4s ease-out;
 		}
+	}
+}
+.option-item:last-child{
+	.comma-space {
+		display: none;
+	}
+}
+.status-selection,
+.priority-selection,
+.assigned-selection {
+	.dropdown-item {
+		padding: 0.25rem 0.75rem;
+		font-size: 0.875rem;
+		i.material-icons {
+			font-size: 1rem;
+			position: relative;
+			top: 2px;
+		}
+		.badge {
+			font-size: 0.875rem;
+		}
+	}
+}
+.status-selection {
+	.dropdown-item {
+		.badge {
+			width: 100%;
+		}
+	}
+}
+@media (max-width: 47.9em) {
+	.card-body {
+		padding: 0.75rem;
+	}
+	.status-selection,
+	.priority-selection,
+	.assigned-selection {
+		.btn {
+			font-size: 0.875rem;
+		}
+
+	}
+	.form-control {
+		font-size: 0.875rem;
 	}
 }

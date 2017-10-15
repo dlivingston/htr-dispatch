@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
 import { Ticket } from '../ticket';
 import { Subject } from 'rxjs/Subject';
 import { StatusFilterPipe } from '../status-filter.pipe';
@@ -16,6 +16,7 @@ import 'rxjs/add/operator/map';
 export class TicketListComponent implements OnInit {
 	tickets: FirebaseListObservable<any[]>;
 	techs: FirebaseListObservable<any[]>;
+	currentUser: FirebaseObjectObservable<any>;
 	idSubject: Subject<any>;
 	clientNameSubject: Subject<any>;
 	prioritySubject: Subject<any>;
@@ -33,11 +34,18 @@ export class TicketListComponent implements OnInit {
 	statusFilterOptions: any[];
 	priorityFilterOptions: any[];
 	assignedTechFilterOptions: any[];
+	showSpinner: boolean = true;
 
 	constructor(public authService: AuthService, public af: AngularFireDatabase, private router:Router) {
 		this.idSubject = new Subject();
 		this.clientNameSubject = new Subject();
 		this.prioritySubject = new Subject();
+		this.authService.user.subscribe(user => {
+			if(user) { 
+				this.currentUser = this.af.object('/users/' + user.uid);
+			}
+			this.showSpinner = false;
+		});
 		this.tickets = af.list('/tickets', {
 			query: {
 				orderByChild: 'id',

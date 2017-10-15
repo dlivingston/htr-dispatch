@@ -1,14 +1,27 @@
-<div class="container my-3" *ngIf="!(authService.user | async)?.uid">
-	<div class="alert alert-danger" >
-	  Unauthorized Access. Please Sign In.
-	</div>
-</div>
+<app-loading-spinner *ngIf="!(authService.user | async)?.uid"></app-loading-spinner>
+
 <div class="container my-3" *ngIf="(authService.user | async)?.uid">
-	<button class="btn back btn-alt" [routerLink]="['/ticket-list']"><i class="material-icons">chevron_left</i> Back to Dispatch List</button>
-	<h2 class="my-3">Ticket Details</h2>
-	<div class="card mb-4">
-		<h5 class="card-header bg-primary text-white">Ticket ID: {{ (ticket | async)?.id }}</h5>
-		<div class="card-body">
+	<div class="row">
+		<div class="px-2 px-md-3">
+			<button class="btn back btn-alt" [routerLink]="['/ticket-list']"><i class="material-icons">chevron_left</i> Back to Dispatch List</button>
+		</div>
+	</div>
+	<div class="row">
+		<h2 class="my-3 px-2 px-md-3">Ticket Details</h2>
+	</div>
+	<div class="card row mb-4">
+		<div class="card-header bg-primary p-2 px-md-3">
+			<div class="row align-items-center">
+				<div class="col-10">
+					<h5 class="text-white m-0">Ticket ID: {{ (ticket | async)?.id }} </h5>
+				</div>
+				<div class="col-2">
+					<button class="btn btn-sm btn-outline-warning float-right" (click)="toggleEditMode()" *ngIf="editMode"><i class="material-icons">cancel</i></button>
+					<button class="btn btn-sm btn-outline-light float-right" (click)="toggleEditMode()" *ngIf="!editMode"><i class="material-icons">mode_edit</i></button>
+				</div>
+			</div>
+		</div>
+		<div class="card-body p-2 p-md-3">
 			<form #f="ngForm">
 				<div class="row">
 					<div class="col-md-6">
@@ -20,6 +33,66 @@
 							<label class="small text-secondary m-0">Client Location / ID</label>
 							<input [ngModel]="(ticket | async)?.client_loc_id" (ngModelChange)="ticket.client_loc_id=$event" name="client_loc_id" class="" [ngClass]="editMode ? 'form-control' : 'form-control-plaintext'" [attr.disabled]="!editMode ? '' : null" [attr.placeholder]="editMode ? 'Client Location' : null" />
 						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="row mt-4">
+							<div class="col-5 pr-1">
+								<div class="input-group priority mb-3">
+									<div class="input-group-btn">
+										<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [attr.disabled]="!editMode ? '' : null">Priority</button>
+										<div class="dropdown-menu">
+											<a (click)="setTicketPriority('1')" class="dropdown-item"><span class="badge badge-priority1">1</span> - Urgent</a>
+											<a (click)="setTicketPriority('2')" class="dropdown-item"><span class="badge badge-priority2">2</span> - High</a>
+											<a (click)="setTicketPriority('3')" class="dropdown-item"><span class="badge badge-priority3">3</span> - Normal</a>
+											<a (click)="setTicketPriority('4')" class="dropdown-item"><span class="badge badge-priority4">4</span> - Low</a>
+										</div>
+									</div>
+									<div class="form-control badge justify-content-center" [ngClass]="{'badge-priority1' : (ticketPriority === '1'), 'badge-priority2' : (ticketPriority === '2'), 'badge-priority3' : (ticketPriority === '3'), 'badge-priority4' : (ticketPriority === '4')}">
+										{{ticketPriority}}
+									</div>
+								</div>
+							</div>
+							<div class="col-7 pl-1">
+								<div class="input-group status mb-3">
+									<div class="input-group-btn">
+										<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [attr.disabled]="!editMode ? '' : null">Status</button>
+										<div class="dropdown-menu">
+											<a (click)="setTicketStatus('Assigned')" class="dropdown-item"><span class="badge badge-assigned">Assigned</span></a>
+											<a (click)="setTicketStatus('Unassigned')" class="dropdown-item"><span class="badge badge-unassigned">Unassigned</span></a>
+											<a (click)="setTicketStatus('Closed')" class="dropdown-item"><span class="badge badge-closed">Closed</span></a>
+											<a (click)="setTicketStatus('Hold')" class="dropdown-item"><span class="badge badge-hold">Hold</span></a>
+										</div>
+									</div>
+									<div class="form-control badge justify-content-center" [ngClass]="{'badge-assigned' : (ticketStatus === 'Assigned'), 'badge-unassigned' : (ticketStatus === 'Unassigned'), 'badge-closed' : (ticketStatus === 'Closed'), 'badge-hold' : (ticketStatus === 'Hold')}">
+										{{ticketStatus}}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6 pr-1">
+								<div class="form-group">
+									<label class="small text-secondary m-0" for="assigned_tech">Assigned Technician</label>
+									<select id="assigned_tech" name="assigned_tech" [ngModel]="(ticket | async)?.assigned_tech" (ngModelChange)="ticket.assigned_tech=$event" class="custom-select form-control" [attr.disabled]="!editMode ? '' : null">
+										<option value="Unassigned" selected>Unassigned</option>
+										<option *ngFor="let tech of techs | async" [ngValue]="tech.$value"> {{tech.$value}} </option>
+									</select>
+								</div>
+							</div>
+							<div class="col-6 pl-1">
+								<div class="form-group">
+									<label class="small text-secondary m-0" for="sched_srvc_date">Scheduled Service Date</label>
+									<div class="input-group date">
+										<input [ngModel]="(ticket | async)?.sched_srvc_date" (ngModelChange)="ticket.sched_srvc_date=$event" name="sched_srvc_date" id="sched_srvc_date" bsDatepicker #dp="bsDatepicker" [bsConfig]="bsConfig" [ngClass]="editMode ? 'form-control' : 'form-control-plaintext'" [attr.disabled]="!editMode ? '' : null">
+										<button class="input-group-addon py-1" *ngIf="editMode" for="sched_srvc_date" (click)="dp.show()" type="button"><i class="material-icons">date_range</i></button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
 						<div class="form-group">
 							<label class="small text-secondary m-0">Address</label>
 							<div class="card p-3 mb-3">
@@ -90,8 +163,8 @@
 							<div class="card mb-3">
 								<div class="card-header">
 									<nav class="nav nav-tabs card-header-tabs" id="contactTabs" role="tablist">
-										<a href="#primaryContactPanel" id="primaryContactTab" class="nav-item nav-link active" data-toggle="tab" role="tab" aria-controls="primaryContactPanel">Primary Contact</a>
-										<a href="#secondaryContactPanel" id="secondaryContactTab" class="nav-item nav-link" data-toggle="tab" role="tab" aria-controls="secondaryContactPanel">Secondary Contact</a>
+										<a href="#primaryContactPanel" id="primaryContactTab" class="nav-item nav-link active" data-toggle="tab" role="tab" aria-controls="primaryContactPanel">Primary</a>
+										<a href="#secondaryContactPanel" id="secondaryContactTab" class="nav-item nav-link" data-toggle="tab" role="tab" aria-controls="secondaryContactPanel">Secondary</a>
 									</nav>
 								</div>
 								<div class="card-body tab-content" id="contactPanels">
@@ -126,69 +199,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="card bg-light">
-							<div class="card-header">Files</div>
-							<div class="card-body">
-								<ul class="list-unstyled">
-									<li *ngFor="let attachment of attachedFiles | async"><a href="{{attachment.url}}" target="_blank">{{attachment.name}}</a></li>
-								</ul>
-								<p *ngIf="(attachedFiles | async)?.length == 0">
-									<em>No Files are currently attached to this ticket</em>
-								</p>
-								<hr>
-								<upload-form [parentKey]="(ticket | async)?.id" (fileUploadData)="addUploadFile($event)"></upload-form>
-							</div>
-						</div>
 					</div>
 					<div class="col-md-6">
-						<div class="row">
-							<div class="col">
-								<div class="input-group priority">
-									<div class="input-group-btn">
-										<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [attr.disabled]="!editMode ? '' : null">Priority</button>
-										<div class="dropdown-menu">
-											<a (click)="setTicketPriority('1')" class="dropdown-item"><span class="badge badge-priority1">1</span> - Urgent</a>
-											<a (click)="setTicketPriority('2')" class="dropdown-item"><span class="badge badge-priority2">2</span> - High</a>
-											<a (click)="setTicketPriority('3')" class="dropdown-item"><span class="badge badge-priority3">3</span> - Normal</a>
-											<a (click)="setTicketPriority('4')" class="dropdown-item"><span class="badge badge-priority4">4</span> - Low</a>
-										</div>
-									</div>
-									<div class="form-control badge justify-content-center" [ngClass]="{'badge-priority1' : (ticketPriority === '1'), 'badge-priority2' : (ticketPriority === '2'), 'badge-priority3' : (ticketPriority === '3'), 'badge-priority4' : (ticketPriority === '4')}">
-										{{ticketPriority}}
-									</div>
-								</div>
-							</div>
-							<div class="col">
-								<div class="input-group status">
-									<div class="input-group-btn">
-										<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [attr.disabled]="!editMode ? '' : null">Status</button>
-										<div class="dropdown-menu">
-											<a (click)="setTicketStatus('Assigned')" class="dropdown-item"><span class="badge badge-assigned">Assigned</span></a>
-											<a (click)="setTicketStatus('Unassigned')" class="dropdown-item"><span class="badge badge-unassigned">Unassigned</span></a>
-											<a (click)="setTicketStatus('Closed')" class="dropdown-item"><span class="badge badge-closed">Closed</span></a>
-											<a (click)="setTicketStatus('Hold')" class="dropdown-item"><span class="badge badge-hold">Hold</span></a>
-										</div>
-									</div>
-									<div class="form-control badge justify-content-center" [ngClass]="{'badge-assigned' : (ticketStatus === 'Assigned'), 'badge-unassigned' : (ticketStatus === 'Unassigned'), 'badge-closed' : (ticketStatus === 'Closed'), 'badge-hold' : (ticketStatus === 'Hold')}">
-										{{ticketStatus}}
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="small text-secondary m-0" for="assigned_tech">Assigned Technician</label>
-							<select id="assigned_tech" name="assigned_tech" [ngModel]="(ticket | async)?.assigned_tech" (ngModelChange)="ticket.assigned_tech=$event" class="custom-select form-control" [attr.disabled]="!editMode ? '' : null">
-								<option value="Unassigned" selected>Unassigned</option>
-								<option *ngFor="let tech of techs | async" [ngValue]="tech.$value"> {{tech.$value}} </option>
-							</select>
-						</div>
-						<div class="form-group">
-							<label class="small text-secondary m-0" for="sched_srvc_date">Scheduled Service Date</label>
-							<div class="input-group date">
-								<input [ngModel]="(ticket | async)?.sched_srvc_date" (ngModelChange)="ticket.sched_srvc_date=$event" name="sched_srvc_date" id="sched_srvc_date" bsDatepicker #dp="bsDatepicker" [bsConfig]="bsConfig" [ngClass]="editMode ? 'form-control' : 'form-control-plaintext'" [attr.disabled]="!editMode ? '' : null">
-								<button class="input-group-addon" *ngIf="editMode" for="sched_srvc_date" (click)="dp.show()" type="button"><i class="material-icons">date_range</i></button>
-							</div>
-						</div>
 						<div class="form-group">
 							<label class="small text-secondary m-0" for="">Issue Description &amp; Notes</label>
 							<textarea [ngModel]="(ticket | async)?.desc_notes" (ngModelChange)="ticket.desc_notes=$event" name="desc_notes" id="desc_notes" cols="30" rows="6" class="" [ngClass]="editMode ? 'form-control' : 'form-control-plaintext'" [attr.readonly]="!editMode ? '' : null"></textarea>
@@ -225,19 +237,44 @@
 										<label class="small text-secondary m-0" for="">Estimated Arrival</label>
 										<div class="input-group">
 											<input [ngModel]="(ticket | async)?.estPartArrDate" (ngModelChange)="ticket.estPartArrDate=$event" name="estPartArrDate" id="estPartArrDate" bsDatepicker #eaDate="bsDatepicker" [bsConfig]="bsConfig" [ngClass]="editMode ? 'form-control' : 'form-control-plaintext'" [attr.disabled]="!editMode ? '' : null">
-											<button class="input-group-addon" *ngIf="editMode" (click)="eaDate.show()"><i class="material-icons">date_range</i></button>
+											<button class="input-group-addon py-1" *ngIf="editMode" (click)="eaDate.show()"><i class="material-icons">date_range</i></button>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="row mt-5">
-							<div class="col">
+					</div>
+				</div>
+				<div class="row py-3">
+					<div class="col-md-6">
+						<div class="card bg-light mb-3">
+							<div class="card-header">Files</div>
+							<div class="card-body">
+								<ul class="list-unstyled">
+									<li *ngFor="let attachment of attachedFiles | async"><a href="{{attachment.url}}" target="_blank">{{attachment.name}}</a></li>
+								</ul>
+								<p *ngIf="(attachedFiles | async)?.length == 0">
+									<em>No Files are currently attached to this ticket</em>
+								</p>
+								<hr>
+								<upload-form [parentKey]="(ticket | async)?.id" (fileUploadData)="addUploadFile($event)"></upload-form>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="row mb-3">
+							<div class="col-6">
 								<button class="btn btn-block btn-lg btn-secondary" (click)="toggleEditMode()" *ngIf="editMode">Cancel</button>
 							</div>
-							<div class="col">
+							<div class="col-6">
 								<button class="btn btn-block btn-lg btn-primary" (click)="toggleEditMode()" *ngIf="!editMode">Edit Ticket</button>
 								<button class="btn btn-block btn-lg btn-success" (click)="updateTicket(f)" *ngIf="editMode">Save Changes </button>
+							</div>
+						</div>
+						<div class="row my-3" *ngIf="editMode && (currentUser | async)?.isAdmin">
+							<div class="col-6">&nbsp;</div>
+							<div class="col-6">
+								<button class="btn btn-danger btn-lg btn-block" (click)="confirmDelete(template)">Delete Ticket</button>
 							</div>
 						</div>
 					</div>
@@ -247,15 +284,29 @@
 	</div>
 </div>
 <div class="container mb-5" *ngIf="(authService.user | async)?.uid">
-	<div class="row mb-2">
-		<div class="col">
+	<div class="row mb-3">
+		<div class="col-7">
 			<h3>Service Notes</h3>
 		</div>
-		<div class="col">
-			<button class="btn btn-outline-primary float-right" (click)="toggleActiveServiceNote(true)">Add Note <i class="material-icons">add</i></button>
+		<div class="col-5">
+			<button class="btn btn-sm btn-outline-primary float-right" (click)="toggleActiveServiceNote(true)">Add Note <i class="material-icons">add</i></button>
 		</div>
 	</div>
 	<app-new-service-note *ngIf="addServiceNoteActive" [ticketID]="(ticket | async)?.id" (addServiceNoteActive)="toggleActiveServiceNote($event)" ></app-new-service-note>
-
 	<app-service-note [ticketID]="(ticket | async)?.id"></app-service-note>
 </div>
+<template #template>
+	<div class="modal-header bg-danger">
+		<h4 class="modal-title pull-left text-white">Delete Ticket ID: {{ (ticket | async)?.id }}</h4>
+		<button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		Are you sure you want to delete this Ticket?
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-secondary" (click)="modalRef.hide()">Nope</button>
+		<button class="btn btn-danger" (click)="deleteTicket()">Delete</button>
+	</div>
+</template>

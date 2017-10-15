@@ -16,6 +16,7 @@ import { TicketDetailsComponent } from './ticket-details/ticket-details.componen
 import { AuthService } from './auth.service';
 import { UploadService } from './uploads/shared/upload.service';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { NewTicketComponent } from './new-ticket/new-ticket.component';
 import { ServiceNoteComponent } from './service-note/service-note.component';
@@ -25,23 +26,24 @@ import { UploadFormComponent } from './uploads/upload-form/upload-form.component
 import { StatusFilterPipe } from './status-filter.pipe';
 import { PriorityFilterPipe } from './priority-filter.pipe';
 import { AssignedTechFilterPipe } from './assigned-tech-filter.pipe';
-// export const firebaseConfig = {
-// 	apiKey: "AIzaSyAH2iBrD3Pu0FO9lolVnKEmVviYAdBOptc",
-//     authDomain: "htr-dispatch.firebaseapp.com",
-//     databaseURL: "https://htr-dispatch.firebaseio.com",
-//     projectId: "htr-dispatch",
-//     storageBucket: "htr-dispatch.appspot.com",
-//     messagingSenderId: "151102819118"
-// };
-
+import { LoadingSpinnerComponent } from './ui/loading-spinner/loading-spinner.component';
 export const firebaseConfig = {
-	apiKey: "AIzaSyCu1LlPQz0CBXj4qdnShbcU3xHPGTdn22c",
-    authDomain: "htr-beta.firebaseapp.com",
-    databaseURL: "https://htr-beta.firebaseio.com",
-    projectId: "htr-beta",
-    storageBucket: "htr-beta.appspot.com",
-    messagingSenderId: "519074297252"
+	apiKey: "AIzaSyAH2iBrD3Pu0FO9lolVnKEmVviYAdBOptc",
+    authDomain: "htr-dispatch.firebaseapp.com",
+    databaseURL: "https://htr-dispatch.firebaseio.com",
+    projectId: "htr-dispatch",
+    storageBucket: "htr-dispatch.appspot.com",
+    messagingSenderId: "151102819118"
 };
+
+// export const firebaseConfig = {
+// 	apiKey: "AIzaSyCu1LlPQz0CBXj4qdnShbcU3xHPGTdn22c",
+//     authDomain: "htr-beta.firebaseapp.com",
+//     databaseURL: "https://htr-beta.firebaseio.com",
+//     projectId: "htr-beta",
+//     storageBucket: "htr-beta.appspot.com",
+//     messagingSenderId: "519074297252"
+// };
 
 const appRoutes: Routes = [
 	{ path: 'ticket-list', component: TicketListComponent },
@@ -50,7 +52,6 @@ const appRoutes: Routes = [
 	{ path: '', component: LoginComponent },
 	{ path: 'upload', component: UploadFormComponent }
 ];
-
 
 @NgModule({
 	declarations: [
@@ -66,6 +67,7 @@ const appRoutes: Routes = [
 	StatusFilterPipe,
 	PriorityFilterPipe,
 	AssignedTechFilterPipe,
+	LoadingSpinnerComponent,
 	],
 	imports: [
 	BrowserModule,
@@ -76,6 +78,7 @@ const appRoutes: Routes = [
       { enableTracing: true } // <-- debugging purposes only
     ),
     BsDatepickerModule.forRoot(),
+    ModalModule.forRoot(),
     AccordionModule.forRoot(),
 	AngularFireModule.initializeApp(firebaseConfig),
 	AngularFireDatabaseModule,

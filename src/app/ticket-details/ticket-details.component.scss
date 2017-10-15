@@ -1,4 +1,5 @@
 $htr-teal: #2384A7;
+
 .btn.back {
 	.material-icons {
 		left: -6px;
@@ -37,6 +38,10 @@ select[disabled].form-control {
 	}
 }
 .card {
+	&.row {
+		margin-right: -0.5rem;
+		margin-left: -0.5rem;
+	}
 	&.part-ordered {
 		.form-check-label {
 			padding-left: 0;

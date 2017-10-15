@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Component, OnInit, Input, TemplateRef } from '@angular/core';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Location }                 from '@angular/common';
 import {NgForm} from '@angular/forms';
 import { AuthService } from '../auth.service';
@@ -7,6 +7,8 @@ import { TicketService } from '../ticket.service';
 import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
 import { Ticket } from '../ticket';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 import { Upload } from '../uploads/shared/upload';
 import 'rxjs/add/operator/take';
 
@@ -18,6 +20,7 @@ import 'rxjs/add/operator/switchMap';
 })
 export class TicketDetailsComponent implements OnInit {
 	private ticket: FirebaseObjectObservable<any>;
+	private currentUser: FirebaseObjectObservable<any>;
 	private techs: FirebaseListObservable<any[]>;
 	private attachedFiles: FirebaseListObservable<any[]>;
 	id: string;
@@ -27,10 +30,12 @@ export class TicketDetailsComponent implements OnInit {
 	private ticketPriority: string;
 	private ticketStatus: string;
 	fileUploads: any[];
-
 	colorTheme = 'theme-default';
 	bsConfig: Partial<BsDatepickerConfig>;
-	constructor(public authService: AuthService, public ticketService: TicketService, public af: AngularFireDatabase, private route: ActivatedRoute, private location: Location) {
+	public modalRef: BsModalRef;
+	userId: string;
+
+	constructor(public authService: AuthService, public ticketService: TicketService, public af: AngularFireDatabase, private route: ActivatedRoute, private location: Location, private router:Router, private modalService: BsModalService) {
 		this.techs = af.list('/techs', {});
 		this.route.params.subscribe( params => this.id = params.id );
 		this.ticket = this.af.object('/tickets/' + this.id);
@@ -39,6 +44,12 @@ export class TicketDetailsComponent implements OnInit {
 			this.ticketPriority = ticket.priority;
 			this.ticketStatus = ticket.status;
 			return ticket;
+		});
+		this.authService.user.subscribe(user => {
+			if(user) { 
+				this.currentUser = this.af.object('/users/' + user.uid);
+				this.userId = user.uid;
+			}
 		});
 		this.attachedFiles = this.af.list('/uploads', {
 			query: {
@@ -81,7 +92,21 @@ export class TicketDetailsComponent implements OnInit {
 		this.ticket.update({status: this.ticketStatus});
 		// if(f.value.status) { this.ticket.update({status : f.value.status}); }
 		this.ticket.update({last_updated : now});
+		this.ticket.update({last_updated_by : this.userId});
 		this.toggleEditMode();
+	}
+
+	deleteTicket(){
+		this.af.object('/tickets/' + this.id).remove()
+		.then(_ => {
+			this.modalRef.hide();
+			this.router.navigate(['ticket-list']);
+		})
+		.catch(err => console.log("Delete Error", err));
+	}
+
+	confirmDelete(template: TemplateRef<any>) {
+		this.modalRef = this.modalService.show(template);
 	}
 
 	toggleEditMode() {

@@ -13,6 +13,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 export class NewTicketComponent implements OnInit {
 	tickets: FirebaseListObservable<any[]>;
 	private techs: FirebaseListObservable<any[]>;
+	private currentUser: FirebaseObjectObservable<any>;
 	newTicketId: string;
 	lastTicketId: string;
 	private partsOrder: boolean;
@@ -20,6 +21,7 @@ export class NewTicketComponent implements OnInit {
 	private ticketStatus: string;
 	colorTheme = 'theme-default';
 	bsConfig: Partial<BsDatepickerConfig>;
+	userId: string;
 
 	constructor(public authService: AuthService, public af: AngularFireDatabase, private router:Router) {
 		this.techs = af.list('/techs', {});
@@ -38,6 +40,12 @@ export class NewTicketComponent implements OnInit {
 				this.newTicketId = ['HTR-', newTicketNum.slice(0, 3), '-', newTicketNum.slice(3)].join('');
 			});
 		});
+		this.authService.user.subscribe(user => {
+			if(user) { 
+				this.currentUser = this.af.object('/users/' + user.uid);
+				this.userId = user.uid;
+			}
+		});
 		this.partsOrder = false;
 		this.ticketPriority = '4';
 		this.ticketStatus = 'Unassigned';
@@ -49,6 +57,7 @@ export class NewTicketComponent implements OnInit {
 		let newTicket = this.af.object('/tickets/' + newID);
 		var now = new Date();
 		newTicket.set({ id : newID });
+		newTicket.update({date_created : now});
 		newTicket.update({last_updated : now});
 		if(f.value.address_city){ newTicket.update({address_city : f.value.address_city}); } else { newTicket.update({address_city : ""}); }
 		if(f.value.address_ln1) { newTicket.update({address_ln1 : f.value.address_ln1}); } else { newTicket.update({address_ln1 : ""}); }
@@ -76,6 +85,7 @@ export class NewTicketComponent implements OnInit {
 		// if(f.value.status) { newTicket.update({status : f.value.status}); } else { newTicket.update({status : ""}); }
 		newTicket.update({priority: this.ticketPriority});
 		newTicket.update({status: this.ticketStatus});
+		newTicket.update({created_by: this.userId});
 		this.router.navigate(['/ticket-detail/' + newID]);
 
 	}

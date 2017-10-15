@@ -5,7 +5,10 @@ $htr-teal: #2384A7;
 			padding-left: 0;
 		}
 	}
-
+	&.row {
+		margin-right: -0.5rem;
+		margin-left: -0.5rem;
+	}
 }
 .priority {
 	width: 140px;

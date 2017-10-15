@@ -1,8 +1,5 @@
-<div class="container my-3" *ngIf="!(authService.user | async)?.uid">
-	<div class="alert alert-danger" >
-	  Unauthorized Access. Please Sign In.
-	</div>
-</div>
+<app-loading-spinner *ngIf="!(authService.user | async)?.uid"></app-loading-spinner>
+
 <div class="container py-4" *ngIf="(authService.user | async)?.uid">
 	<h1>Dispatch List</h1>
 	<div class="row py-3">
@@ -183,6 +180,7 @@
 			</div>
 		</div>
 		<div class="col-md-6">
+			<app-loading-spinner *ngIf="!(tickets | async)"></app-loading-spinner>
 			<div class="card mb-2" *ngFor="let ticket of tickets | async | statusFilter:statusFilterOptions | priorityFilter:priorityFilterOptions | assignedTechFilter:assignedTechFilterOptions">
 				<div class="card-body">
 					<div class="row">

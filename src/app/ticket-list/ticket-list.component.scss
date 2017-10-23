@@ -1,3 +1,4 @@
+$htr-teal: #2384A7;
 .details-link {
 	display: block;
 	.material-icons {
@@ -24,6 +25,52 @@
 .option-item:last-child{
 	.comma-space {
 		display: none;
+	}
+}
+.btn.filters {
+	color: $htr-teal;
+	padding-left: 0;
+	text-decoration: none;
+	&.closed {
+		i.material-icons {
+			transform: rotate(0deg);
+			transition: transform 0.4s ease-out;
+		}
+	}
+	&.open {
+		i.material-icons {
+			transform: rotate(90deg);
+			transition: transform 0.4s ease-out;
+		}
+	}
+
+}
+.card.filters {
+	border-top: 1px solid $htr-teal;
+	border-bottom: 1px solid $htr-teal;
+	border-radius: 0;
+	border-left: 0;
+	border-right: 0;
+	.collapse {
+		max-height: 0;
+		transition: all 0.4s ease-out;
+		display: block;
+		overflow: hidden;
+		.card-body {
+			opacity: 0;
+			transition: opacity 0.25s ease-out;
+			transition-delay: 0.3s;
+		}
+		&.show {
+			max-height: 200px;
+			transition: all 0.4s ease-out;
+			overflow: initial;
+			.card-body {
+				opacity: 1;
+				transition: opacity 0.25s ease-out;
+				transition-delay: 0.3s;
+			}
+		}
 	}
 }
 .status-selection,
@@ -63,5 +110,48 @@
 	}
 	.form-control {
 		font-size: 0.875rem;
+	}
+}
+.ticket-list-tableview {
+	font-size: 0.75rem;
+	thead tr {
+		border-radius: 4px;
+	}
+	thead th {
+		border: 0;
+		padding-top: 4px;
+		&:first-child {
+			border-top-left-radius: 4px;
+		}
+		&:last-child {
+			border-top-right-radius: 4px;
+		}
+		&.clickable {
+			text-decoration: underline;
+			cursor: pointer;
+			white-space: nowrap;
+			&:hover {
+				background-color: darken($htr-teal, 10%);
+			}
+			.ascend {
+				i.material-icons {
+					transform: rotateX(0deg);
+					transition: transform 0.4s ease-out;
+				}
+			}
+			.descend {
+				i.material-icons {
+					transform: rotateX(180deg);
+					transition: transform 0.4s ease-out;
+				}
+			}
+		}
+		i.material-icons {
+			position: relative;
+			top: 6px;
+		}
+	}
+	tbody tr {
+		cursor: pointer;
 	}
 }

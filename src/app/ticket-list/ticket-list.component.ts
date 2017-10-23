@@ -57,8 +57,7 @@ export class TicketListComponent implements OnInit {
 		this.viewFilter = false;
 		this.statusFilterOptions = ['All'];
 		this.priorityFilterOptions = ['All'];
-		this.assignedTechFilterOptions = ['All'];
-	}
+		this.assignedTechFilterOptions = ['All'];	}
 
 	orderBy(option: {value: string, label: string}) {
 		this.selectedOption = option;

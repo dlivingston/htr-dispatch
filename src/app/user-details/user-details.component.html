@@ -1,0 +1,6 @@
+<app-loading-spinner *ngIf="!(authService.user | async)?.uid"></app-loading-spinner>
+<div class="container my-3" *ngIf="(authService.user | async)?.uid">
+	<div class="row">
+		<h2 class="my-3 px-2 px-md-3">User Details</h2>
+	</div>
+</div>

@@ -41,7 +41,7 @@ export class TicketListComponent implements OnInit {
 		this.clientNameSubject = new Subject();
 		this.prioritySubject = new Subject();
 		this.authService.user.subscribe(user => {
-			if(user) { 
+			if(user) {
 				this.currentUser = this.af.object('/users/' + user.uid);
 			}
 			this.showSpinner = false;
@@ -57,7 +57,8 @@ export class TicketListComponent implements OnInit {
 		this.viewFilter = false;
 		this.statusFilterOptions = ['All'];
 		this.priorityFilterOptions = ['All'];
-		this.assignedTechFilterOptions = ['All'];	}
+		this.assignedTechFilterOptions = ['All'];
+	}
 
 	orderBy(option: {value: string, label: string}) {
 		this.selectedOption = option;

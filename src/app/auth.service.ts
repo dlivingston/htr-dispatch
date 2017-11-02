@@ -18,7 +18,7 @@ export class AuthService {
 		.auth
 		.signInWithEmailAndPassword(email, password)
 		.then(value => {
-			console.log('Nice, it worked!');
+			//console.log('Nice, it worked!');
 		})
 		.catch(err => {
 			console.log('Something went wrong:',err.message);

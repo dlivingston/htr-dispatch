@@ -107,6 +107,16 @@
 											</div>
 										</div>
 									</a>
+									<a (click)="toggleStatusFilterOptions('Invoiced')" class="dropdown-item">
+										<div class="row">
+											<div class="col-1">
+												<i class="material-icons" [class.d-none]="statusFilterOptions.indexOf('Invoiced') === -1">check</i>
+											</div>
+											<div class="col ml-1">
+												<span class="badge badge-invoiced">Invoiced</span>
+											</div>
+										</div>
+									</a>
 									<a (click)="toggleStatusFilterOptions('Closed')" class="dropdown-item">
 										<div class="row">
 											<div class="col-1">
@@ -191,7 +201,7 @@
 							<td>{{ticket.client_name}}</td>
 							<td>{{ticket.client_loc_id ? ticket.client_loc_id : '--' }}</td>
 							<td>{{ticket.assigned_tech ? ticket.assigned_tech : '--' }}</td>
-							<td><span class="badge status" [class.badge-assigned]="ticket.status === 'Assigned'" [class.badge-unassigned]="ticket.status === 'Unassigned'" [class.badge-hold]="ticket.status === 'Hold'" [class.badge-closed]="ticket.status === 'Closed'">{{ticket.status}}</span></td>
+							<td><span class="badge status" [class.badge-assigned]="ticket.status === 'Assigned'" [class.badge-invoiced]="ticket.status === 'Invoiced'" [class.badge-unassigned]="ticket.status === 'Unassigned'" [class.badge-hold]="ticket.status === 'Hold'" [class.badge-closed]="ticket.status === 'Closed'">{{ticket.status}}</span></td>
 							<td><span class="badge priority" [class.badge-priority1]="ticket.priority === '1'" [class.badge-priority2]="ticket.priority === '2'" [class.badge-priority3]="ticket.priority === '3'" [class.badge-priority4]="ticket.priority === '4'">{{ticket.priority}}</span></td>
 							<td>{{ticket.sched_srvc_date ? (ticket.sched_srvc_date | date:'MM/dd/y')  : '-- / -- / ----'}}</td>
 							<td>{{ticket.last_updated ? (ticket.last_updated | date:'MM/dd/y') : '-- / -- / ----'}}</td>
@@ -214,7 +224,7 @@
 				<span class="input-group-btn">
 					<button class="btn btn-success toggle" (click)="toggleAscending()" [ngClass]="sortAscending ? 'ascend' : 'descend'"><i class="material-icons">sort</i></button>
 				</span>
-			</div>			
+			</div>
 		</div>
 		<div class="col-12 d-lg-none">
 			<app-loading-spinner *ngIf="!(tickets | async)"></app-loading-spinner>
@@ -232,7 +242,7 @@
 								<div class="col">
 									<div>
 										<small class="text-secondary">Status:</small> <br>
-										<h4><span class="badge status" [class.badge-assigned]="ticket.status === 'Assigned'" [class.badge-unassigned]="ticket.status === 'Unassigned'" [class.badge-hold]="ticket.status === 'Hold'" [class.badge-closed]="ticket.status === 'Closed'">{{ticket.status}}</span></h4>
+										<h4><span class="badge status" [class.badge-assigned]="ticket.status === 'Assigned'" [class.badge-invoiced]="ticket.status === 'Invoiced'"  [class.badge-unassigned]="ticket.status === 'Unassigned'" [class.badge-hold]="ticket.status === 'Hold'" [class.badge-closed]="ticket.status === 'Closed'">{{ticket.status}}</span></h4>
 									</div>
 								</div>
 								<div class="col">

@@ -43,7 +43,8 @@ body {
 .badge {
 	&.badge-assigned { background-color: $htr-teal !important; }
 	&.badge-unassigned { background-color: $htr-sand !important; }
-	&.badge-closed { background-color: #343a40 !important; }
+	&.badge-invoiced { background-color: #343a40 !important; }
+	&.badge-closed { background-color: #dc3545 !important; }
 	&.badge-hold { background-color: #353EB6 !important; }
 	&.badge-priority4 { background-color: $htr-teal !important; }
 	&.badge-priority3 { background-color: #28a745 !important; }

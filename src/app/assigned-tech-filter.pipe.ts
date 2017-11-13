@@ -2,12 +2,12 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
 	name: 'assignedTechFilter',
-	pure: false
+	//pure: false
 })
 export class AssignedTechFilterPipe implements PipeTransform {
 
 	transform(tickets: any[], techs: any[]): any {
-		if(techs[0] === 'All') {
+		if(techs[0] === 'All' || !tickets) {
 			return tickets;
 		} else {
 			var returnArray = [];

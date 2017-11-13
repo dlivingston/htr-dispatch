@@ -12,13 +12,11 @@ export class ServiceNoteComponent implements OnInit, OnChanges {
 	@Input() ticketID: string;
 	notes: FirebaseListObservable<any[]>;
 	attachedFile: FirebaseObjectObservable<any[]>;
-	_noteKeys: Array<any>;
 	constructor(public authService: AuthService, public af: AngularFireDatabase) {}
 
 	ngOnInit() {}
 
 	ngOnChanges() {
- 		console.log("OnChanges TicketID ", this.ticketID);
  		this.notes = this.af.list('/service-notes', {
 			query: {
 				orderByChild: 'ticketID',

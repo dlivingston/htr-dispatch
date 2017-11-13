@@ -28,6 +28,7 @@ import { PriorityFilterPipe } from './priority-filter.pipe';
 import { AssignedTechFilterPipe } from './assigned-tech-filter.pipe';
 import { LoadingSpinnerComponent } from './ui/loading-spinner/loading-spinner.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
+import { ListSearchPipe } from './list-search.pipe';
 
 export const firebaseConfig = {
 	apiKey: "AIzaSyAH2iBrD3Pu0FO9lolVnKEmVviYAdBOptc",
@@ -72,6 +73,7 @@ const appRoutes: Routes = [
 	AssignedTechFilterPipe,
 	LoadingSpinnerComponent,
 	UserDetailsComponent,
+	ListSearchPipe,
 	],
 	imports: [
 	BrowserModule,

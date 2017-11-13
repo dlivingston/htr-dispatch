@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
 import { Ticket } from '../ticket';
 import { Subject } from 'rxjs/Subject';
-import { StatusFilterPipe } from '../status-filter.pipe';
-import { PriorityFilterPipe } from '../priority-filter.pipe';
+// import { StatusFilterPipe } from '../status-filter.pipe';
+// import { PriorityFilterPipe } from '../priority-filter.pipe';
 import 'rxjs/add/operator/map';
 
 @Component({
@@ -17,6 +17,7 @@ export class TicketListComponent implements OnInit {
 	tickets: FirebaseListObservable<any[]>;
 	techs: FirebaseListObservable<any[]>;
 	currentUser: FirebaseObjectObservable<any>;
+	currentUserId: string;
 	idSubject: Subject<any>;
 	clientNameSubject: Subject<any>;
 	prioritySubject: Subject<any>;
@@ -34,30 +35,49 @@ export class TicketListComponent implements OnInit {
 	statusFilterOptions: any[];
 	priorityFilterOptions: any[];
 	assignedTechFilterOptions: any[];
-	showSpinner: boolean = true;
+	// showSpinner: boolean = true;
 
 	constructor(public authService: AuthService, public af: AngularFireDatabase, private router:Router) {
 		this.idSubject = new Subject();
 		this.clientNameSubject = new Subject();
 		this.prioritySubject = new Subject();
+		this.statusFilterOptions = [];
+		this.priorityFilterOptions = [];
+		this.assignedTechFilterOptions = [];
 		this.authService.user.subscribe(user => {
+
 			if(user) {
 				this.currentUser = this.af.object('/users/' + user.uid);
+				this.currentUser.subscribe(user => {
+					if(user.statusFilterOptions) {
+						this.statusFilterOptions = user.statusFilterOptions;
+					} else {
+						this.statusFilterOptions = ['All'];
+					}
+					if(user.priorityFilterOptions) {
+						this.priorityFilterOptions = user.priorityFilterOptions;
+					} else {
+						this.priorityFilterOptions = ['All'];
+					}
+					if(user.assignedTechFilterOptions) {
+						this.assignedTechFilterOptions = user.assignedTechFilterOptions;
+					} else {
+						this.assignedTechFilterOptions = ['All'];
+					}
+				});
+				this.currentUserId = user.uid;
 			}
-			this.showSpinner = false;
 		});
 		this.tickets = af.list('/tickets', {
 			query: {
 				orderByChild: 'id',
 			}
 		});
+
 		this.techs = af.list('/techs', {});
 		this.selectedOption = this.orderByOptions[0];
 		this.sortAscending = true;
 		this.viewFilter = false;
-		this.statusFilterOptions = ['All'];
-		this.priorityFilterOptions = ['All'];
-		this.assignedTechFilterOptions = ['All'];
 	}
 
 	orderBy(option: {value: string, label: string}) {
@@ -89,6 +109,7 @@ export class TicketListComponent implements OnInit {
 	toggleStatusFilterOptions(status: string) {
 		if(status === 'All') {
 			this.statusFilterOptions = ['All'];
+			this.currentUser.update({ statusFilterOptions: this.statusFilterOptions });
 			return null;
 		}
 		if(this.statusFilterOptions.indexOf(status) === -1){
@@ -96,14 +117,18 @@ export class TicketListComponent implements OnInit {
 				this.statusFilterOptions = [];
 			}
 			this.statusFilterOptions.push(status);
+			this.currentUser.update({ statusFilterOptions: this.statusFilterOptions });
+
 		} else {
 			this.statusFilterOptions.splice(this.statusFilterOptions.indexOf(status), 1);
+			this.currentUser.update({ statusFilterOptions: this.statusFilterOptions });
 		}
 	}
 
 	togglePriorityFilterOptions(priority: string) {
 		if(priority === 'All') {
 			this.priorityFilterOptions = ['All'];
+			this.currentUser.update({ priorityFilterOptions: this.priorityFilterOptions });
 			return null;
 		}
 		if(this.priorityFilterOptions.indexOf(priority) === -1){
@@ -111,14 +136,19 @@ export class TicketListComponent implements OnInit {
 				this.priorityFilterOptions = [];
 			}
 			this.priorityFilterOptions.push(priority);
+			this.currentUser.update({ priorityFilterOptions: this.priorityFilterOptions });
+
 		} else {
 			this.priorityFilterOptions.splice(this.priorityFilterOptions.indexOf(priority), 1);
+			this.currentUser.update({ priorityFilterOptions: this.priorityFilterOptions });
+
 		}
 	}
 
 	toggleAssignedTechFilterOptions(tech: string) {
 		if(tech === 'All') {
 			this.assignedTechFilterOptions = ['All'];
+			this.currentUser.update({ assignedTechFilterOptions: this.assignedTechFilterOptions });
 			return null;
 		}
 		if(this.assignedTechFilterOptions.indexOf(tech) === -1){
@@ -126,8 +156,10 @@ export class TicketListComponent implements OnInit {
 				this.assignedTechFilterOptions = [];
 			}
 			this.assignedTechFilterOptions.push(tech);
+			this.currentUser.update({ assignedTechFilterOptions: this.assignedTechFilterOptions });
 		} else {
 			this.assignedTechFilterOptions.splice(this.assignedTechFilterOptions.indexOf(tech), 1);
+			this.currentUser.update({ assignedTechFilterOptions: this.assignedTechFilterOptions });
 		}
 	}
 

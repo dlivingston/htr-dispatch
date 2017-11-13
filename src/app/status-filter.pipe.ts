@@ -2,12 +2,12 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
 	name: 'statusFilter',
-	pure: false
+	//pure: false
 })
 export class StatusFilterPipe implements PipeTransform {
 
 	transform(tickets: any[], status: any[]): any {
-		if(status[0] === 'All') {
+		if(status[0] === 'All' || !tickets) {
 			return tickets;
 		} else {
 			var returnArray = [];

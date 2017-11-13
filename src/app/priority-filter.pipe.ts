@@ -2,12 +2,12 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
 	name: 'priorityFilter',
-	pure: false
+	//pure: false
 })
 export class PriorityFilterPipe implements PipeTransform {
 
 	transform(tickets: any[], priority: any[]): any {
-		if(priority[0] === 'All') {
+		if(priority[0] === 'All' || !tickets) {
 			return tickets;
 		} else {
 			var returnArray = [];

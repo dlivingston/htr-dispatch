@@ -77,6 +77,14 @@ export class TicketDetailsComponent implements OnInit {
 		if(f.value.callback) { this.ticket.update({callback : f.value.callback}); } else { this.ticket.update({callback : false}); }
 		if(f.value.client_loc_id) { this.ticket.update({client_loc_id : f.value.client_loc_id}); }
 		if(f.value.client_name) { this.ticket.update({client_name : f.value.client_name}); }
+		if(f.value.short_desc) { 
+			if(f.value.short_desc.length > 50) {
+				var shortDesc = f.value.short_desc.slice(0, 50);
+				this.ticket.update({short_desc : shortDesc});
+			} else {
+				this.ticket.update({short_desc : f.value.short_desc}); 
+			}
+		}
 		if(f.value.desc_notes) { this.ticket.update({desc_notes : f.value.desc_notes}); }
 		if(f.value.discount_partial) { this.ticket.update({discount_partial : f.value.discount_partial}); } else { this.ticket.update({discount_partial : false}); }
 		if(f.value.estPartArrDate) { this.ticket.update({estPartArrDate : f.value.estPartArrDate}); }

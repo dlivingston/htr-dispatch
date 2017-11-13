@@ -9,8 +9,8 @@
 			<button class="btn btn-primary px-4 float-md-right" [routerLink]="['/new-ticket']">Create New Ticket <i class="material-icons">add</i></button>
 		</div>
 	</div>
-	<div class="row py-2">
-		<div class="col-xs-12 col-lg-6">
+	<div class="row justify-content-between">
+		<div class="col-xs-12 col-lg-6 py-2">
 			<button class="btn btn-link filters" (click)="toggleFilterPanel()" [ngClass]="(viewFilter) ? 'open' : 'closed'">List Filters <i class="material-icons">chevron_right</i></button>
 			<div class="card filters">
 				<div [ngClass]="(viewFilter) ? 'collapse show' : 'collapse'">
@@ -177,6 +177,12 @@
 				</div>
 			</div>
 		</div>
+		<div class="col-lg-4 py-2">
+			<div class="input-group">
+				<input type="text" class="form-control" placeholder="Search by ID or Client Name" [(ngModel)]="searchText">
+				<span class="input-group-addon"><i class="material-icons">search</i></span>
+			</div>
+		</div>
 	</div>
 	<div class="row py-2">
 		<div class="col-12 d-none d-lg-block d-xl-block">
@@ -187,24 +193,26 @@
 								<th class="clickable" (click)="selectedOption != orderByOptions[0] ? orderBy(orderByOptions[0]) : toggleAscending()">Ticket ID&nbsp;<span *ngIf="selectedOption === orderByOptions[0]" [ngClass]="sortAscending ? 'ascend' : 'descend'"><i class="material-icons">arrow_drop_down</i></span></th>
 								<th class="clickable" (click)="selectedOption != orderByOptions[1] ? orderBy(orderByOptions[1]) : toggleAscending()">Client <span *ngIf="selectedOption === orderByOptions[1]" [ngClass]="sortAscending ? 'ascend' : 'descend'"><i class="material-icons">arrow_drop_down</i></span></th>
 								<th>Location</th>
+								<th>Issue </th>
 								<th class="clickable" (click)="selectedOption != orderByOptions[2] ? orderBy(orderByOptions[2]) : toggleAscending()">Assigned Tech <span *ngIf="selectedOption === orderByOptions[2]" [ngClass]="sortAscending ? 'ascend' : 'descend'"><i class="material-icons">arrow_drop_down</i></span></th>
-								<th>Status </th>
 								<th class="clickable" (click)="selectedOption != orderByOptions[5] ? orderBy(orderByOptions[5]) : toggleAscending()">Priority <span *ngIf="selectedOption === orderByOptions[5]" [ngClass]="sortAscending ? 'ascend' : 'descend'"><i class="material-icons">arrow_drop_down</i></span></th>
-								<th class="clickable" (click)="selectedOption != orderByOptions[3] ? orderBy(orderByOptions[3]) : toggleAscending()">Scheduled Service <span *ngIf="selectedOption === orderByOptions[3]" [ngClass]="sortAscending ? 'ascend' : 'descend'"><i class="material-icons">arrow_drop_down</i></span></th>
-								<th class="clickable" (click)="selectedOption != orderByOptions[4] ? orderBy(orderByOptions[4]) : toggleAscending()">Last Updated <span *ngIf="selectedOption === orderByOptions[4]" [ngClass]="sortAscending ? 'ascend' : 'descend'"><i class="material-icons">arrow_drop_down</i></span></th>
+								<th>Status </th>
+								<th class="clickable" (click)="selectedOption != orderByOptions[3] ? orderBy(orderByOptions[3]) : toggleAscending()">Sched. Srvc <span *ngIf="selectedOption === orderByOptions[3]" [ngClass]="sortAscending ? 'ascend' : 'descend'"><i class="material-icons">arrow_drop_down</i></span></th>
+								<th class="clickable" (click)="selectedOption != orderByOptions[4] ? orderBy(orderByOptions[4]) : toggleAscending()">Updated <span *ngIf="selectedOption === orderByOptions[4]" [ngClass]="sortAscending ? 'ascend' : 'descend'"><i class="material-icons">arrow_drop_down</i></span></th>
 							</tr>
 						</thead>
 					<tbody>
 						<app-loading-spinner *ngIf="!(tickets | async)"></app-loading-spinner>
-						<tr *ngFor="let ticket of tickets | async | statusFilter:statusFilterOptions | priorityFilter:priorityFilterOptions | assignedTechFilter:assignedTechFilterOptions" [routerLink]="['/ticket-detail', ticket.id]">
-							<td>{{ticket.id}}</td>
-							<td>{{ticket.client_name}}</td>
-							<td>{{ticket.client_loc_id ? ticket.client_loc_id : '--' }}</td>
-							<td>{{ticket.assigned_tech ? ticket.assigned_tech : '--' }}</td>
-							<td><span class="badge status" [class.badge-assigned]="ticket.status === 'Assigned'" [class.badge-invoiced]="ticket.status === 'Invoiced'" [class.badge-unassigned]="ticket.status === 'Unassigned'" [class.badge-hold]="ticket.status === 'Hold'" [class.badge-closed]="ticket.status === 'Closed'">{{ticket.status}}</span></td>
-							<td><span class="badge priority" [class.badge-priority1]="ticket.priority === '1'" [class.badge-priority2]="ticket.priority === '2'" [class.badge-priority3]="ticket.priority === '3'" [class.badge-priority4]="ticket.priority === '4'">{{ticket.priority}}</span></td>
-							<td>{{ticket.sched_srvc_date ? (ticket.sched_srvc_date | date:'MM/dd/y')  : '-- / -- / ----'}}</td>
-							<td>{{ticket.last_updated ? (ticket.last_updated | date:'MM/dd/y') : '-- / -- / ----'}}</td>
+						<tr *ngFor="let ticket of tickets | async | statusFilter:statusFilterOptions | priorityFilter:priorityFilterOptions | assignedTechFilter:assignedTechFilterOptions | listSearch:searchText" [routerLink]="['/ticket-detail', ticket.id]">
+							<td class="ticket-id-col">{{ticket.id}}</td>
+							<td class="client-name-col">{{ticket.client_name}}</td>
+							<td class="client-loc-col">{{ticket.client_loc_id ? ticket.client_loc_id : '--' }}</td>
+							<td class="issue-col"><div class="issue-wrapper">{{ticket.short_desc ? ticket.short_desc : '--' }}</div></td>
+							<td class="assigned-tech-col">{{ticket.assigned_tech ? ticket.assigned_tech : '--' }}</td>
+							<td class="priority-col"><span class="badge priority" [class.badge-priority1]="ticket.priority === '1'" [class.badge-priority2]="ticket.priority === '2'" [class.badge-priority3]="ticket.priority === '3'" [class.badge-priority4]="ticket.priority === '4'">{{ticket.priority}}</span></td>
+							<td class="status-col"><span class="badge status" [class.badge-assigned]="ticket.status === 'Assigned'" [class.badge-invoiced]="ticket.status === 'Invoiced'" [class.badge-unassigned]="ticket.status === 'Unassigned'" [class.badge-hold]="ticket.status === 'Hold'" [class.badge-closed]="ticket.status === 'Closed'">{{ticket.status}}</span></td>
+							<td class="srvc-date-col">{{ticket.sched_srvc_date ? (ticket.sched_srvc_date | date:'MM/dd/y')  : '--/--/----'}}</td>
+							<td class="updated-col">{{ticket.last_updated ? (ticket.last_updated | date:'MM/dd/y') : '--/--/----'}}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -228,36 +236,46 @@
 		</div>
 		<div class="col-12 d-lg-none">
 			<app-loading-spinner *ngIf="!(tickets | async)"></app-loading-spinner>
-			<div class="card mb-2" *ngFor="let ticket of tickets | async | statusFilter:statusFilterOptions | priorityFilter:priorityFilterOptions | assignedTechFilter:assignedTechFilterOptions">
-				<div class="card-body">
+			<div class="card mb-2" *ngFor="let ticket of tickets | async | statusFilter:statusFilterOptions | priorityFilter:priorityFilterOptions | assignedTechFilter:assignedTechFilterOptions | listSearch:searchText">
+				<div class="card-header bg-primary text-white py-2" [routerLink]="['/ticket-detail', ticket.id]">
+					Ticket ID:&nbsp;{{ticket.id}} <span class="details-link float-right"><i class="material-icons">chevron_right</i></span>
+				</div>
+				<div class="card-body py-3">
 					<div class="row">
 						<div class="col">
-							<div><small class="text-secondary">Ticket ID:</small> <br> {{ticket.id}}</div>
-							<div><small class="text-secondary">Client:</small> <br> {{ticket.client_name}}</div>
-							<div><small class="text-secondary">Location:</small> <br> {{ticket.client_loc_id ? ticket.client_loc_id : '--' }}</div>
+							<div><small class="text-secondary">Client:</small> <br> <span class="text-wrapper">{{ticket.client_name}}</span></div>
+							<div><small class="text-secondary">Location:</small> <br> <span class="text-wrapper">{{ticket.client_loc_id ? ticket.client_loc_id : '--' }}</span></div>
 							<div><small class="text-secondary">Assigned Tech:</small> <br> {{ticket.assigned_tech ? ticket.assigned_tech : '--' }}</div>
 						</div>
 						<div class="col">
-							<div class="row">
-								<div class="col">
-									<div>
-										<small class="text-secondary">Status:</small> <br>
-										<h4><span class="badge status" [class.badge-assigned]="ticket.status === 'Assigned'" [class.badge-invoiced]="ticket.status === 'Invoiced'"  [class.badge-unassigned]="ticket.status === 'Unassigned'" [class.badge-hold]="ticket.status === 'Hold'" [class.badge-closed]="ticket.status === 'Closed'">{{ticket.status}}</span></h4>
-									</div>
-								</div>
-								<div class="col">
+							<div class="row mb-2">
+								<div class="col-6 pr-0">
 									<div>
 										<small class="text-secondary">Priority:</small> <br>
-										<h4><span class="badge priority" [class.badge-priority1]="ticket.priority === '1'" [class.badge-priority2]="ticket.priority === '2'" [class.badge-priority3]="ticket.priority === '3'" [class.badge-priority4]="ticket.priority === '4'">{{ticket.priority}}</span></h4>
+										<span class="badge priority" [class.badge-priority1]="ticket.priority === '1'" [class.badge-priority2]="ticket.priority === '2'" [class.badge-priority3]="ticket.priority === '3'" [class.badge-priority4]="ticket.priority === '4'">{{ticket.priority}}</span>
+									</div>
+								</div>
+								<div class="col-6 pl-0">
+									<div>
+										<small class="text-secondary">Status:</small> <br>
+										<span class="badge status" [class.badge-assigned]="ticket.status === 'Assigned'" [class.badge-invoiced]="ticket.status === 'Invoiced'"  [class.badge-unassigned]="ticket.status === 'Unassigned'" [class.badge-hold]="ticket.status === 'Hold'" [class.badge-closed]="ticket.status === 'Closed'">{{ticket.status}}</span>
 									</div>
 								</div>
 							</div>
-							<div><small class="text-secondary">Scheduled Service:</small> <br> {{ticket.sched_srvc_date ? (ticket.sched_srvc_date | date:'MM/dd/y')  : '-- / -- / ----'}}</div>
-							<div><small class="text-secondary">Last Updated:</small> <br> {{ticket.last_updated ? (ticket.last_updated | date:'MM/dd/y') : '-- / -- / ----'}}</div>
-							<a class="details-link mt-3" [routerLink]="['/ticket-detail', ticket.id]" >View Details <i class="material-icons">chevron_right</i></a>
+							<div class="row">
+								<div class="col"><small class="text-secondary">Sched. Srvc:</small> <br> <span class="nowrap">{{ticket.sched_srvc_date ? (ticket.sched_srvc_date | date:'MM/dd/y')  : '--/--/----'}}</span></div>
+								<div class="col"><small class="text-secondary">Updated:</small> <br> <span class="nowrap">{{ticket.last_updated ? (ticket.last_updated | date:'MM/dd/y') : '--/--/----'}}</span></div>
+							</div>
+							
 						</div>
 					</div>
+					<div class="row">
+						<div class="col"><small class="text-secondary">Issue:</small> <br>{{ticket.short_desc ? ticket.short_desc : '--' }}</div>
+					</div>
 				</div>
+				<!-- <div class="card-footer bg-primary">
+					<a class="details-link text-white text-right" [routerLink]="['/ticket-detail', ticket.id]" >View Details <i class="material-icons">chevron_right</i></a>
+				</div> -->
 			</div>
 		</div>
 	</div>

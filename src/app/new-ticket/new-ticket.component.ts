@@ -71,6 +71,14 @@ export class NewTicketComponent implements OnInit {
 		if(f.value.callback) { newTicket.update({callback : f.value.callback}); } else { newTicket.update({callback : false}); }
 		if(f.value.client_loc_id) { newTicket.update({client_loc_id : f.value.client_loc_id}); } else { newTicket.update({client_loc_id : ""}); }
 		if(f.value.client_name) { newTicket.update({client_name : f.value.client_name}); } else { newTicket.update({client_name : ""}); }
+		if(f.value.short_desc) { 
+			if(f.value.short_desc.length > 50) {
+				var shortDesc = f.value.short_desc.slice(0, 50);
+				newTicket.update({short_desc : shortDesc}); 
+			} else {
+				newTicket.update({short_desc : f.value.short_desc}); 
+			}
+		} else { newTicket.update({short_desc : ""}); }
 		if(f.value.desc_notes) { newTicket.update({desc_notes : f.value.desc_notes}); } else { newTicket.update({desc_notes : ""}); }
 		if(f.value.discount_partial) { newTicket.update({discount_partial : f.value.discount_partial}); } else { newTicket.update({discount_partial : false}); }
 		if(f.value.estPartArrDate) { newTicket.update({estPartArrDate : f.value.estPartArrDate}); } else { newTicket.update({estPartArrDate : ""}); }

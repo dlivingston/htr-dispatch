@@ -1,9 +1,16 @@
 $htr-teal: #2384A7;
 .details-link {
 	display: block;
+	width: 24px;
+    height: 24px;
+    border: 2px solid white;
+    border-radius: 50%;
+    position: relative;
+    right: -10px;
 	.material-icons {
-		top: 6px;
-		left: -6px;
+		top: 4px;
+		//left: -6px;
+		right: 1px;
 		line-height: 0;
 		position: relative;
 	}
@@ -96,7 +103,16 @@ $htr-teal: #2384A7;
 		}
 	}
 }
+.text-wrapper {
+	max-height: 3rem;
+	display: block;
+	overflow: hidden;
+}
+.nowrap {
+	white-space: nowrap;
+}
 @media (max-width: 47.9em) {
+	.card-header { padding-left: 0.75rem; }
 	.card-body {
 		padding: 0.75rem;
 	}
@@ -154,4 +170,28 @@ $htr-teal: #2384A7;
 	tbody tr {
 		cursor: pointer;
 	}
+	.ticket-id-col {
+		width: 12ch;
+		white-space: nowrap;
+	}
+	.client-name-col,
+	.client-loc-col {
+		max-width: 0;
+		width: 25ch;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.issue-col {
+		width: 30ch;
+		.issue-wrapper {
+			max-height: 36px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	}
+	.updated-col, .srvc-date-col {
+		width: 10ch;
+	}
+
 }

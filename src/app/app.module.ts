@@ -30,23 +30,23 @@ import { LoadingSpinnerComponent } from './ui/loading-spinner/loading-spinner.co
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { ListSearchPipe } from './list-search.pipe';
 
-// export const firebaseConfig = {
-// 	apiKey: "AIzaSyAH2iBrD3Pu0FO9lolVnKEmVviYAdBOptc",
-//     authDomain: "htr-dispatch.firebaseapp.com",
-//     databaseURL: "https://htr-dispatch.firebaseio.com",
-//     projectId: "htr-dispatch",
-//     storageBucket: "htr-dispatch.appspot.com",
-//     messagingSenderId: "151102819118"
-// };
-
 export const firebaseConfig = {
-	apiKey: "AIzaSyCu1LlPQz0CBXj4qdnShbcU3xHPGTdn22c",
-    authDomain: "htr-beta.firebaseapp.com",
-    databaseURL: "https://htr-beta.firebaseio.com",
-    projectId: "htr-beta",
-    storageBucket: "htr-beta.appspot.com",
-    messagingSenderId: "519074297252"
+	apiKey: "AIzaSyAH2iBrD3Pu0FO9lolVnKEmVviYAdBOptc",
+	authDomain: "htr-dispatch.firebaseapp.com",
+	databaseURL: "https://htr-dispatch.firebaseio.com",
+	projectId: "htr-dispatch",
+	storageBucket: "htr-dispatch.appspot.com",
+	messagingSenderId: "151102819118"
 };
+
+// export const firebaseConfig = {
+// 	apiKey: "AIzaSyCu1LlPQz0CBXj4qdnShbcU3xHPGTdn22c",
+// 	authDomain: "htr-beta.firebaseapp.com",
+// 	databaseURL: "https://htr-beta.firebaseio.com",
+// 	projectId: "htr-beta",
+// 	storageBucket: "htr-beta.appspot.com",
+// 	messagingSenderId: "519074297252"
+// };
 
 const appRoutes: Routes = [
 	{ path: 'ticket-list', component: TicketListComponent },
@@ -80,11 +80,11 @@ const appRoutes: Routes = [
 	FormsModule,
 	HttpModule,
 	RouterModule.forRoot(
-      appRoutes, {}
-    ),
-    BsDatepickerModule.forRoot(),
-    ModalModule.forRoot(),
-    AccordionModule.forRoot(),
+		appRoutes, {}
+		),
+	BsDatepickerModule.forRoot(),
+	ModalModule.forRoot(),
+	AccordionModule.forRoot(),
 	AngularFireModule.initializeApp(firebaseConfig),
 	AngularFireDatabaseModule,
 	AngularFireAuthModule

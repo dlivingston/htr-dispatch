@@ -15,6 +15,7 @@ import * as _ from "lodash";
 export class NewServiceNoteComponent implements OnInit,OnChanges {
 	@Input() ticketID: string;
 	@Output() addServiceNoteActive = new EventEmitter<boolean>();
+	@Output() fileUploadData = new EventEmitter<any>();
 	notes: FirebaseListObservable<any[]>;
 	private currentUser: FirebaseObjectObservable<any>;
 	selectedFiles: FileList;
@@ -22,46 +23,39 @@ export class NewServiceNoteComponent implements OnInit,OnChanges {
 	serviceNoteInfo: string;
 	userId: string;
 	userName: string;
+	serviceNoteFileDetails: Upload;
+	noteTimeStamp: string;
 
 	constructor(public authService: AuthService, public af: AngularFireDatabase, private upSvc: UploadService) {
 		this.authService.user.subscribe(user => {
 			if(user) { 
 				this.userId = user.uid;
-				console.log('this.userId', this.userId);
 				this.currentUser = this.af.object('/users/' + this.userId);
 				this.currentUser.subscribe(current => {
 					this.userName = current.name;
-					console.log('current', current);
 				});
 			}
 		});
+		this.noteTimeStamp = "note-" + Date.now();
 	}
 
 	ngOnInit() {}
 
- 	ngOnChanges() {
-	
- 	}
+ 	ngOnChanges() {}
 
  	saveNote(f: NgForm) {
- 		this.notes = this.af.list('/service-notes', {});
- 		var now = new Date();		
- 		var strServiceNoteText;
- 		var attachedFileName;
- 		if(this.selectedFiles){ 
- 			let file = this.selectedFiles.item(0);
- 			this.currentUpload = new Upload(file);
- 			attachedFileName = file.name; 
- 		} else { 
- 			attachedFileName = ""; 
- 		}
- 		if(f.value.serviceNoteInfo){ strServiceNoteText = f.value.serviceNoteInfo} else {strServiceNoteText = ""}
- 		this.notes.push({ticketID: this.ticketID, userName: this.userName, userId: this.userId, serviceNoteInfo: strServiceNoteText, attachedFileName: attachedFileName, timeStamp: now.toString()})
- 			.then((note) => { 
- 				if(this.selectedFiles){
- 					this.upSvc.pushUpload(note.key, this.currentUpload)
- 				} 
- 			});
+ 		const serviceNotes = this.af.list('/service-notes', {});
+ 		var now = new Date();	
+		const newNote = { 
+			ticketID: this.ticketID, 
+			userName: this.userName, 
+			userId: this.userId, 
+			serviceNoteInfo: (f.value.serviceNoteInfo ? f.value.serviceNoteInfo : ''), 
+			attachedFileName: (this.serviceNoteFileDetails ? this.serviceNoteFileDetails.name : ''), 
+			attachedFileUrl: (this.serviceNoteFileDetails ? this.serviceNoteFileDetails.url : ''), 
+			timeStamp: now.toString() 
+		};
+		serviceNotes.push(newNote);
  		this.addServiceNoteActive.emit(false);
  	}
 
@@ -71,7 +65,10 @@ export class NewServiceNoteComponent implements OnInit,OnChanges {
 
  	detectFiles(event) {
 		this.selectedFiles = event.target.files;
-		console.log('File Selected');
+	}
+
+	addUploadFile(fileDetails: Upload){
+		this.serviceNoteFileDetails = fileDetails;
 	}
 
 }

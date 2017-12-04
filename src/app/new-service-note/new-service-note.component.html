@@ -6,13 +6,14 @@
 			</div>
 			<div class="row">
 				<div class="col">
-					<label class="custom-file mb-3">
+					<!-- <label class="custom-file mb-3">
 						<input type="file" class="custom-file-input" (change)="detectFiles($event)">
 						<span class="custom-file-control"><span *ngFor="let file of selectedFiles">{{file.name}}</span></span>
-					</label>
+					</label> -->
+					<upload-form [parentKey]="noteTimeStamp" (fileUploadData)="addUploadFile($event)"></upload-form>
 				</div>
 				<div class="col">
-					<button class="btn btn-success float-right" (click)="saveNote(srvNoteForm)">Save Note</button>
+					<button class="btn btn-success float-right" (click)="saveNote(srvNoteForm)" [attr.disabled]="(!serviceNoteFileDetails && !serviceNoteInfo) ? '' : null" >Save Note</button>
 					<button class="btn btn-secondary float-right mr-2" (click)="cancelNote()">Cancel</button>
 				</div>
 			</div>

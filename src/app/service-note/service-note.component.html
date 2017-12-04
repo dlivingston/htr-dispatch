@@ -1,7 +1,9 @@
 <accordion [closeOthers]="true">
 	<accordion-group *ngFor="let note of notes | async" class="mb-3" panelClass="service-note">
 		<div accordion-heading class=""><i class="material-icons arrow">arrow_drop_down</i><span *ngIf="(note.userName)"> {{note.userName}} - </span>{{ note.timeStamp | date:'yMd' }}  <span *ngIf="note.attachedFileName" class="float-right"><i class="material-icons attachment">attachment</i></span></div>
-		{{note.serviceNoteInfo}}
-		<a href="{{note.attachedFileUrl}}" target="_blank">{{note.attachedFileName}}</a>
+		<p *ngIf="note.serviceNoteInfo">{{note.serviceNoteInfo}}</p>
+		<p *ngIf="note.attachedFileUrl">
+			<a href="{{note.attachedFileUrl}}" target="_blank">{{note.attachedFileName}}</a>
+		</p>
 	</accordion-group>
 </accordion>

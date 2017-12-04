@@ -34,7 +34,6 @@ export class UploadService {
 	pushUpload(subfolder: string, upload: Upload) {
 		const storageRef = firebase.storage().ref();
 		const uploadTask = storageRef.child(`${this.basePath}/${subfolder}/${upload.file.name}`).put(upload.file);
-
 		uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
 			(snapshot) =>  {
 				// upload in progress
@@ -43,7 +42,7 @@ export class UploadService {
 			},
 			(error) => {
 				// upload failed
-				console.log(error)
+				console.log("Upload Failed", error);
 			},
 			() => {
 				// upload success
@@ -51,10 +50,9 @@ export class UploadService {
 				upload.name = upload.file.name
 				upload.attachedKey = subfolder
 				if(subfolder.substring(0, 3) === 'HTR') {
-					upload.attachedTo = 'ticket'
+					upload.attachedTo = 'ticket';
 				} else {
-					upload.attachedTo = 'note'
-					this.db.object('/service-notes/' + subfolder).update({attachedFileUrl: upload.url});
+					upload.attachedTo = 'note';
 				}
 				this.saveFileData(upload)
 				return undefined

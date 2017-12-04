@@ -22,13 +22,11 @@ export class UploadFormComponent implements OnInit {
 
 	detectFiles(event) {
 		this.selectedFiles = event.target.files;
-		console.log('selectedFiles', this.selectedFiles);
 	}
 
 	uploadSingle() {
 		let file = this.selectedFiles.item(0)
 		this.currentUpload = new Upload(file);
-		console.log('currentUpload', this.currentUpload, this.currentUpload.name);
 		this.fileUploadData.emit(this.currentUpload);
 		this.upSvc.pushUpload(this.parentKey, this.currentUpload)
 	}
@@ -43,7 +41,4 @@ export class UploadFormComponent implements OnInit {
 			this.upSvc.pushUpload(this.parentKey, this.currentUpload)}
 			)
 	}
-
-
-
 }

@@ -262,6 +262,7 @@
 									<em>No Files are currently attached to this ticket</em>
 								</p>
 								<hr>
+								<h6>Upload</h6>
 								<upload-form [parentKey]="(ticket | async)?.id" (fileUploadData)="addUploadFile($event)"></upload-form>
 							</div>
 						</div>

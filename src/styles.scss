@@ -26,8 +26,11 @@ body {
 		background-color: $htr-teal !important;
 	}
 }
-.btn-primary:hover {
+.btn-primary:hover, .btn-primary.active {
 	background-color: darken($htr-teal, 10) !important;
+}
+.btn-primary:focus, {
+	box-shadow: none;
 }
 .btn-outline-light:hover {
 	color: $htr-teal !important;
@@ -82,4 +85,8 @@ body {
 }
 bs-datepicker-container {
 	z-index: 100;
+}
+
+.form-group {
+	position: relative;
 }

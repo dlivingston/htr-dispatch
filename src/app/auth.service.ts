@@ -13,15 +13,13 @@ export class AuthService {
 	}
 
 	login(email: string, password: string) {
-		console.log("login");
 		this.firebaseAuth
 		.auth
 		.signInWithEmailAndPassword(email, password)
 		.then(value => {
-			//console.log('Nice, it worked!');
 		})
 		.catch(err => {
-			console.log('Something went wrong:',err.message);
+			console.log('Something went wrong: ',err.message);
 		});
 	}
 

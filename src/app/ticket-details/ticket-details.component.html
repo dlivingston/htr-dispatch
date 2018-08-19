@@ -74,9 +74,8 @@
 							<div class="col-6 pr-1">
 								<div class="form-group">
 									<label class="small text-secondary m-0" for="assigned_tech">Assigned Technician</label>
-									<select id="assigned_tech" name="assigned_tech" [ngModel]="(ticket | async)?.assigned_tech" (ngModelChange)="ticket.assigned_tech=$event" class="custom-select form-control" [attr.disabled]="!editMode ? '' : null">
-										<option value="Unassigned" selected>Unassigned</option>
-										<option *ngFor="let tech of techs | async" [ngValue]="tech.$value"> {{tech.$value}} </option>
+									<select id="assigned_tech" name="assigned_tech" [ngModel]="(ticket | async)" [compareWith]="compareFn" (ngModelChange)="onAssignedTechChange($event)" class="custom-select form-control" [attr.disabled]="!editMode ? '' : null">
+										<option *ngFor="let tech of techs | async | techListAlphaSort" [ngValue]="tech"> {{tech.name}} </option>
 									</select>
 								</div>
 							</div>
@@ -230,8 +229,8 @@
 								<div class="card-body">
 									<div class="form-group">
 										<label class="small text-secondary m-0" for="">Ordered by</label>
-										<select id="parts_ordered_by" name="parts_ordered_by" class="custom-select form-control" [ngModel]="(ticket | async)?.parts_ordered_by" (ngModelChange)="ticket.parts_ordered_by=$event"  [attr.disabled]="!editMode ? '' : null">
-											<option *ngFor="let tech of techs | async" [ngValue]="tech.$value"> {{tech.$value}} </option>
+										<select id="parts_ordered_by" name="parts_ordered_by" class="custom-select form-control" [ngModel]="(ticket | async)" [compareWith]="comparePoTech" (ngModelChange)="onPartsOrderedByChange($event)"  [attr.disabled]="!editMode ? '' : null">
+											<option *ngFor="let tech of techs | async | techPoSort" [ngValue]="tech"> {{tech.name}} </option>
 										</select>
 									</div>
 									<div class="form-group">

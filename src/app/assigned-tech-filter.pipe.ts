@@ -13,7 +13,7 @@ export class AssignedTechFilterPipe implements PipeTransform {
 			var returnArray = [];
 			for(var i=0; i < tickets.length; i++) {
 				for(var j=0; j < techs.length; j++) {
-					if(tickets[i].assigned_tech === techs[j]){
+					if (tickets[i].assigned_tech_name === techs[j]){
 						returnArray.push(tickets[i]);
 					}
 				}

@@ -28,3 +28,6 @@ $htr-teal: #2384A7;
 	.badge-closed { border-color: #666666 !important; }
 	.badge-hold { border-color: #9B479F !important; }
 }
+.form-control:valid {
+	border-color: rgba(0,0,0,.15);
+} 

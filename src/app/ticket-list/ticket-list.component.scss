@@ -1,4 +1,13 @@
 $htr-teal: #2384A7;
+h1 {
+	font-size: 1.75rem;
+	@media (max-width: 575.98px) {
+		font-size: 1.625rem;
+	}
+}
+.fs-sm {
+	font-size: 0.8rem;
+}
 .details-link {
 	display: block;
 	width: 24px;
@@ -29,12 +38,16 @@ $htr-teal: #2384A7;
 		}
 	}
 }
+.page-link {
+	background-color: $htr-teal;
+	color: #ffffff;
+}
 .option-item:last-child{
 	.comma-space {
 		display: none;
 	}
 }
-.btn.filters {
+.btn.filters, .btn.options {
 	color: $htr-teal;
 	padding-left: 0;
 	text-decoration: none;
@@ -46,13 +59,13 @@ $htr-teal: #2384A7;
 	}
 	&.open {
 		i.material-icons {
-			transform: rotate(90deg);
+			transform: rotate(180deg);
 			transition: transform 0.4s ease-out;
 		}
 	}
 
 }
-.card.filters {
+.card.filters, .card.options {
 	border-top: 1px solid $htr-teal;
 	border-bottom: 1px solid $htr-teal;
 	border-radius: 0;
@@ -69,7 +82,7 @@ $htr-teal: #2384A7;
 			transition-delay: 0.3s;
 		}
 		&.show {
-			max-height: 200px;
+			max-height: 250px;
 			transition: all 0.4s ease-out;
 			overflow: initial;
 			.card-body {
@@ -79,6 +92,59 @@ $htr-teal: #2384A7;
 			}
 		}
 	}
+}
+.card.options {
+	border: 0;
+	.switch {
+		position: relative;
+		display: inline-block;
+		width: 36px;
+		height: 24px;
+		border-radius: 0.25rem;
+		margin: 0;
+	  }
+	.switch input {display:none;}
+	/* The slider */
+	.slider {
+		position: absolute;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: #ccc;
+		-webkit-transition: .4s;
+		transition: .4s;
+		border-radius: 5px;
+		box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.45);
+	}
+  
+	.slider:before {
+		position: absolute;
+		content: "";
+		height: 22px;
+		width: 12px;
+		left: 1px;
+		bottom: 1px;
+		background-color: white;
+		-webkit-transition: .4s;
+		transition: .4s;
+		border-radius: 0.25rem;
+	}
+  
+  input:checked + .slider {
+	background-color: $htr-teal;
+  }
+  
+  input:focus + .slider {
+	box-shadow: 0 0 1px $htr-teal;
+  }
+  
+  input:checked + .slider:before {
+	-webkit-transform: translateX(22px);
+	-ms-transform: translateX(22px);
+	transform: translateX(22px);
+  }
 }
 .status-selection,
 .priority-selection,
@@ -136,6 +202,7 @@ $htr-teal: #2384A7;
 	thead th {
 		border: 0;
 		padding-top: 4px;
+		white-space: nowrap;
 		&:first-child {
 			border-top-left-radius: 4px;
 		}

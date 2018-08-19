@@ -29,67 +29,85 @@ import { AssignedTechFilterPipe } from './assigned-tech-filter.pipe';
 import { LoadingSpinnerComponent } from './ui/loading-spinner/loading-spinner.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { ListSearchPipe } from './list-search.pipe';
-
-export const firebaseConfig = {
-	apiKey: "AIzaSyAH2iBrD3Pu0FO9lolVnKEmVviYAdBOptc",
-	authDomain: "htr-dispatch.firebaseapp.com",
-	databaseURL: "https://htr-dispatch.firebaseio.com",
-	projectId: "htr-dispatch",
-	storageBucket: "htr-dispatch.appspot.com",
-	messagingSenderId: "151102819118"
-};
+import { CreatedDateSortPipe } from './created-date-sort.pipe';
+import { TicketIdSortPipe } from './ticket-id-sort.pipe';
+import { LocationSortPipe } from './location-sort.pipe';
+import { ClientSortPipe } from './client-sort.pipe';
+import { TechSortPipe } from './tech-sort.pipe';
+import { PrioritySortPipe } from './priority-sort.pipe';
+import { ScheduleSortPipe } from './schedule-sort.pipe';
+import { TechListAlphaSortPipe } from './tech-list-alpha-sort.pipe';
+import { TechPoSortPipe } from './tech-po-sort.pipe';
 
 // export const firebaseConfig = {
-// 	apiKey: "AIzaSyCu1LlPQz0CBXj4qdnShbcU3xHPGTdn22c",
-// 	authDomain: "htr-beta.firebaseapp.com",
-// 	databaseURL: "https://htr-beta.firebaseio.com",
-// 	projectId: "htr-beta",
-// 	storageBucket: "htr-beta.appspot.com",
-// 	messagingSenderId: "519074297252"
+// 	apiKey: "AIzaSyAH2iBrD3Pu0FO9lolVnKEmVviYAdBOptc",
+// 	authDomain: "htr-dispatch.firebaseapp.com",
+// 	databaseURL: "https://htr-dispatch.firebaseio.com",
+// 	projectId: "htr-dispatch",
+// 	storageBucket: "htr-dispatch.appspot.com",
+// 	messagingSenderId: "151102819118"
 // };
 
+export const firebaseConfig = {
+  apiKey: "AIzaSyCu1LlPQz0CBXj4qdnShbcU3xHPGTdn22c",
+  authDomain: "htr-beta.firebaseapp.com",
+  databaseURL: "https://htr-beta.firebaseio.com",
+  projectId: "htr-beta",
+  storageBucket: "htr-beta.appspot.com",
+  messagingSenderId: "519074297252"
+};
+
 const appRoutes: Routes = [
-	{ path: 'ticket-list', component: TicketListComponent },
-	{ path: 'new-ticket', component: NewTicketComponent },
-	{ path: 'ticket-detail/:id', component: TicketDetailsComponent },
-	{ path: '', component: LoginComponent },
-	{ path: 'upload', component: UploadFormComponent },
-	{ path: 'user-details', component: UserDetailsComponent }
+  { path: 'ticket-list', component: TicketListComponent },
+  { path: 'new-ticket', component: NewTicketComponent },
+  { path: 'ticket-detail/:id', component: TicketDetailsComponent },
+  { path: '', component: LoginComponent },
+  { path: 'upload', component: UploadFormComponent },
+  { path: 'user-details', component: UserDetailsComponent }
 ];
 
 @NgModule({
-	declarations: [
-	AppComponent,
-	LoginComponent,
-	TicketListComponent,
-	TicketDetailsComponent,
-	NewTicketComponent,
-	ServiceNoteComponent,
-	NewServiceNoteComponent,
-	//O2UploadToFbsComponent,
-	UploadFormComponent,
-	StatusFilterPipe,
-	PriorityFilterPipe,
-	AssignedTechFilterPipe,
-	LoadingSpinnerComponent,
-	UserDetailsComponent,
-	ListSearchPipe,
-	],
-	imports: [
-	BrowserModule,
-	FormsModule,
-	HttpModule,
-	RouterModule.forRoot(
-		appRoutes, {}
-		),
-	BsDatepickerModule.forRoot(),
-	ModalModule.forRoot(),
-	AccordionModule.forRoot(),
-	AngularFireModule.initializeApp(firebaseConfig),
-	AngularFireDatabaseModule,
-	AngularFireAuthModule
-	],
-	providers: [AuthService, UploadService, { provide: LocationStrategy, useClass: HashLocationStrategy }],
-	bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    TicketListComponent,
+    TicketDetailsComponent,
+    NewTicketComponent,
+    ServiceNoteComponent,
+    NewServiceNoteComponent,
+    //O2UploadToFbsComponent,
+    UploadFormComponent,
+    StatusFilterPipe,
+    PriorityFilterPipe,
+    AssignedTechFilterPipe,
+    LoadingSpinnerComponent,
+    UserDetailsComponent,
+    ListSearchPipe,
+    CreatedDateSortPipe,
+    TicketIdSortPipe,
+    LocationSortPipe,
+    ClientSortPipe,
+    TechSortPipe,
+    PrioritySortPipe,
+    ScheduleSortPipe,
+    TechListAlphaSortPipe,
+    TechPoSortPipe,
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    RouterModule.forRoot(
+      appRoutes, {}
+    ),
+    BsDatepickerModule.forRoot(),
+    ModalModule.forRoot(),
+    AccordionModule.forRoot(),
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireDatabaseModule,
+    AngularFireAuthModule
+  ],
+  providers: [AuthService, UploadService, { provide: LocationStrategy, useClass: HashLocationStrategy }],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

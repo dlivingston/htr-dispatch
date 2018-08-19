@@ -14,10 +14,6 @@ export class TicketService {
 
 	constructor(public af: AngularFireDatabase) { }
 
-	// getTickets(num) {
-	// 	this.tickets = this.af.list('/tickets', { query: { limitToLast: num | 20} } );
-	// 	return this.tickets;
-	// }
 
 	getTickets() {
 		this.tickets = this.af.list('/tickets', {} );
@@ -27,7 +23,6 @@ export class TicketService {
 	getTicket(id: string) {
 		this.ticket = this.af.object('/tickets/' + id);
 		this.ticket.subscribe(ticket => {
-			console.log(ticket);
 			return ticket;
 		});
 	}

@@ -29,6 +29,9 @@ export class TicketDetailsComponent implements OnInit {
 	private addServiceNoteActive: boolean;
 	private ticketPriority: string;
 	private ticketStatus: string;
+	private ticketAssignedName: string;
+	private ticketAssignedId: string;
+	private partsOrderedBy: string;
 	fileUploads: any[];
 	colorTheme = 'theme-default';
 	bsConfig: Partial<BsDatepickerConfig>;
@@ -43,6 +46,9 @@ export class TicketDetailsComponent implements OnInit {
 			this.partsOrder = ticket.parts_ordered;
 			this.ticketPriority = ticket.priority;
 			this.ticketStatus = ticket.status;
+			this.ticketAssignedName = ticket.assigned_tech_name;
+			this.ticketAssignedId = ticket.assigned_tech;
+			this.partsOrderedBy = ticket.parts_ordered_by;
 			return ticket;
 		});
 		this.authService.user.subscribe(user => {
@@ -73,7 +79,9 @@ export class TicketDetailsComponent implements OnInit {
 		if(f.value.alt_contact_email) { this.ticket.update({alt_contact_email : f.value.alt_contact_email}); }
 		if(f.value.alt_contact_name) { this.ticket.update({alt_contact_name : f.value.alt_contact_name}); }
 		if(f.value.alt_contact_phone) { this.ticket.update({alt_contact_phone : f.value.alt_contact_phone}); }
-		if(f.value.assigned_tech) { this.ticket.update({assigned_tech : f.value.assigned_tech}); }
+		// if(f.value.assigned_tech) { this.ticket.update({assigned_tech : f.value.assigned_tech}); }
+		this.ticket.update({ assigned_tech_name: this.ticketAssignedName });
+		this.ticket.update({ assigned_tech: this.ticketAssignedId });
 		if(f.value.callback) { this.ticket.update({callback : f.value.callback}); } else { this.ticket.update({callback : false}); }
 		if(f.value.client_loc_id) { this.ticket.update({client_loc_id : f.value.client_loc_id}); }
 		if(f.value.client_name) { this.ticket.update({client_name : f.value.client_name}); }
@@ -89,7 +97,8 @@ export class TicketDetailsComponent implements OnInit {
 		if(f.value.discount_partial) { this.ticket.update({discount_partial : f.value.discount_partial}); } else { this.ticket.update({discount_partial : false}); }
 		if(f.value.estPartArrDate) { this.ticket.update({estPartArrDate : f.value.estPartArrDate}); }
 		if(f.value.parts_ordered) { this.ticket.update({parts_ordered : f.value.parts_ordered}); } else { this.ticket.update({parts_ordered : false}); }
-		if(f.value.parts_ordered_by) { this.ticket.update({parts_ordered_by : f.value.parts_ordered_by}); }
+		// if(f.value.parts_ordered_by) { this.ticket.update({parts_ordered_by : f.value.parts_ordered_by}); }
+		this.ticket.update({ parts_ordered_by: this.partsOrderedBy });
 		if(f.value.parts_vendor) { this.ticket.update({parts_vendor : f.value.parts_vendor}); }
 		if(f.value.primary_contact_email) { this.ticket.update({primary_contact_email : f.value.primary_contact_email}); }
 		if(f.value.primary_contact_name) { this.ticket.update({primary_contact_name : f.value.primary_contact_name}); }
@@ -142,6 +151,23 @@ export class TicketDetailsComponent implements OnInit {
 	}
 
 	addUploadFile(fileDetails: Upload){
+	}
+
+	onAssignedTechChange(value){
+		this.ticketAssignedName = value.name;
+		this.ticketAssignedId = value.$key;
+	}
+
+	onPartsOrderedByChange(value) {
+		this.partsOrderedBy = value.name;
+	}
+
+	compareFn(optionOne, optionTwo): boolean {
+		return optionOne.name === optionTwo.assigned_tech_name;
+	}
+
+	comparePoTech(optionOne, optionTwo): boolean {
+		return optionOne.name === optionTwo.parts_ordered_by;
 	}
 
 	ngOnInit() {
